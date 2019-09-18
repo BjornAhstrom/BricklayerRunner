@@ -5,9 +5,11 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public Vector2 moveVelocity;
+    public float maxSpeed = 10;
     public float jumpVelocity;
-    public float fallMultiplier = 2.5f;
-    public float lowJumpMultiplier = 2f;
+    //public float fallMultiplier = 2.5f;
+    //public float lowJumpMultiplier = 2f;
+    public LayerMask groundMask;
 
     private bool walk, walkLeft, walkRight, jump;
 
@@ -21,26 +23,28 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Jump();
         CheckPlayerInput();
-        UpdatePlayerPosition();
+        Jump();
+        //UpdatePlayerPosition();
     }
 
     void Jump()
     {
-        if (jump)
-        {
-            GetComponent<Rigidbody2D>().velocity = Vector2.up * jumpVelocity;
-        }
+        if (jump && CheckGround())
+          rb.velocity = Vector2.up * jumpVelocity;
+    }
 
-        if (rb.velocity.y < 0)
-        {
-            rb.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
-        }
-        else if (rb.velocity.y > 0 && !jump)
-        {
-            rb.velocity += Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
-        }
+    void TestUpdatePlayerPosition()
+    {
+        float move = Input.GetAxis("Horizontal");
+
+        rb.velocity = new Vector2(maxSpeed * move, rb.velocity.y);
+    }
+
+    private void FixedUpdate()
+    {
+        TestUpdatePlayerPosition();
+        //UpdatePlayerPosition();
     }
 
     void UpdatePlayerPosition()
@@ -53,20 +57,18 @@ public class PlayerController : MonoBehaviour
             if (walkLeft)
             {
                 rb.velocity = Vector2.left * moveVelocity;
-                //pos.x -= moveVelocity.x * Time.deltaTime;
 
-                //scale.x = -1;
+                Debug.Log("Pressed left");
+                scale.x = -1;
             }
 
             else if (walkRight)
             {
                 rb.velocity = Vector2.right * moveVelocity;
-                //pos.x += moveVelocity.x * Time.deltaTime;
 
-                //scale.x = 1;
+                Debug.Log("Pressed right");
+                scale.x = 1;
             }
-
-            //transform.position = pos;
         }
     }
 
@@ -82,5 +84,21 @@ public class PlayerController : MonoBehaviour
         walkRight = !inputLeft && inputRight;
 
         jump = inputJump;
+    }
+
+    bool CheckGround()
+    {
+        Vector2 originMiddle = new Vector2(transform.position.x, transform.position.y - (0.65f * 0.5f));
+
+
+        RaycastHit2D groundMiddle = Physics2D.Raycast(originMiddle, Vector2.down, 0.1f, groundMask);
+
+        if (groundMiddle.collider == null)
+        {
+            Debug.Log("No ground");
+            return false;
+        }
+
+        return true;
     }
 }

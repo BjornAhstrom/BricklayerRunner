@@ -34,6 +34,11 @@ public class PlayerMovment : MonoBehaviour
     {
         checkPlayerInput();
 
+        
+    }
+
+    private void FixedUpdate()
+    {
         UpdatePlayerPosition();
     }
 

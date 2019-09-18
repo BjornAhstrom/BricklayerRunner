@@ -8,29 +8,50 @@ public class CameraFollow : MonoBehaviour
     public Transform player;
     public Transform leftBounds;
     public Transform rightBounds;
+    public Transform bottomBounds;
+    public Vector3 offset;
 
-    public float smoothDampTime = 0.15f;
+    [Range(0, 1)]
+    public float smoothDampTime = 0.30f;
+    [Range(0, 10)]
+    public float orthographicSize = 2;
 
     private Vector3 SmoothDampVelocity = Vector3.zero;
 
-    private float camWidth, camHeight, levelMin, levelMax;
+    private float camWidth, camHeight, levelMin, levelMax; // levelMinBottom;
 
     // Start is called before the first frame update
     void Start()
     {
-        camHeight = Camera.main.orthographicSize * 2;
+        camHeight = Camera.main.orthographicSize * orthographicSize;
         camWidth = camHeight * Camera.main.aspect;
 
         float leftBoundsWidth = leftBounds.GetComponentInChildren<SpriteRenderer>().bounds.size.x / 2;
-        float tightBoundsWidth = rightBounds.GetComponentInChildren<SpriteRenderer>().bounds.size.x / 2;
+        float rightBoundsWidth = rightBounds.GetComponentInChildren<SpriteRenderer>().bounds.size.x / 2;
+        //float bottomBoundsWidth = bottomBounds.GetComponentInChildren<SpriteRenderer>().bounds.size.y / 2;
 
         levelMin = leftBounds.position.x + leftBoundsWidth + (camWidth / 2);
-        levelMax = rightBounds.position.x - tightBoundsWidth - (camWidth / 2);
+        levelMax = rightBounds.position.x - rightBoundsWidth - (camWidth / 2);
+        //levelMinBottom = bottomBounds.position.y + bottomBoundsWidth + (camHeight / 2);
+
+        //levelHeigtMin = bottomBounds.position.y - bottomBoundsWidth - (camHeight / 2);
 
     }
 
     // Update is called once per frame
     void Update()
+    {
+        //CameraUpdatePositions();
+        CamerFollowUpdatePosition();
+    }
+
+    void CameraUpdatePositions()
+    {
+        transform.position = new Vector3(player.position.x + offset.x, player.position.y + offset.y, offset.z);
+
+    }
+
+    void CamerFollowUpdatePosition()
     {
         if (player)
         {
@@ -38,9 +59,15 @@ public class CameraFollow : MonoBehaviour
 
             float x = Mathf.SmoothDamp(transform.position.x, playerX, ref SmoothDampVelocity.x, smoothDampTime);
 
-            transform.position = new Vector3(x, transform.position.y, transform.position.z);
+
+            float playerY = Mathf.Max(0.05f, Mathf.Min(levelMax, player.position.y));
+
+            float y = Mathf.SmoothDamp(transform.position.y, playerY, ref SmoothDampVelocity.y, smoothDampTime);
+
+
+            transform.position = new Vector3(x, y, transform.position.z);
+
         }
-        
     }
 
 }

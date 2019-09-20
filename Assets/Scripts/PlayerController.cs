@@ -34,6 +34,12 @@ public class PlayerController : MonoBehaviour
           rb.velocity = Vector2.up * jumpVelocity;
     }
 
+    private void FixedUpdate()
+    {
+        TestUpdatePlayerPosition();
+        //UpdatePlayerPosition();
+    }
+
     void TestUpdatePlayerPosition()
     {
         float move = Input.GetAxis("Horizontal");
@@ -41,36 +47,36 @@ public class PlayerController : MonoBehaviour
         rb.velocity = new Vector2(maxSpeed * move, rb.velocity.y);
     }
 
-    private void FixedUpdate()
-    {
-        TestUpdatePlayerPosition();
-        //UpdatePlayerPosition();
-    }
+    
 
-    void UpdatePlayerPosition()
-    {
-        //Vector3 pos = transform.localPosition;
-        Vector3 scale = transform.localScale;
 
-        if (walk)
-        {
-            if (walkLeft)
-            {
-                rb.velocity = Vector2.left * moveVelocity;
 
-                Debug.Log("Pressed left");
-                scale.x = -1;
-            }
 
-            else if (walkRight)
-            {
-                rb.velocity = Vector2.right * moveVelocity;
 
-                Debug.Log("Pressed right");
-                scale.x = 1;
-            }
-        }
-    }
+    //void UpdatePlayerPosition()
+    //{
+    //    //Vector3 pos = transform.localPosition;
+    //    Vector3 scale = transform.localScale;
+
+    //    if (walk)
+    //    {
+    //        if (walkLeft)
+    //        {
+    //            rb.velocity = Vector2.left * moveVelocity;
+
+    //            //Debug.Log("Pressed left");
+    //            scale.x = -1;
+    //        }
+
+    //        else if (walkRight)
+    //        {
+    //            rb.velocity = Vector2.right * moveVelocity;
+
+    //            //Debug.Log("Pressed right");
+    //            scale.x = 1;
+    //        }
+    //    }
+    //}
 
     void CheckPlayerInput()
     {
@@ -88,14 +94,12 @@ public class PlayerController : MonoBehaviour
 
     bool CheckGround()
     {
-        Vector2 originMiddle = new Vector2(transform.position.x, transform.position.y - (0.65f * 0.5f));
-
-
-        RaycastHit2D groundMiddle = Physics2D.Raycast(originMiddle, Vector2.down, 0.1f, groundMask);
+        Vector2 middle = new Vector2(transform.position.x, transform.position.y - (0.65f * 0.5f));
+        RaycastHit2D groundMiddle = Physics2D.Raycast(middle, Vector2.down, 0.1f, groundMask);
 
         if (groundMiddle.collider == null)
         {
-            Debug.Log("No ground");
+            //Debug.Log("No ground");
             return false;
         }
 

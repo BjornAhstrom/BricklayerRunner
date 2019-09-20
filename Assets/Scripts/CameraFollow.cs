@@ -15,6 +15,10 @@ public class CameraFollow : MonoBehaviour
     public float smoothDampTime = 0.30f;
     [Range(0, 10)]
     public float orthographicSize = 2;
+    [Range(0, 1)]
+    public float minPlayerYBottomCameraPosition = 0.05f;
+    [Range(0, 1)]
+    public float maxPlayerYTopCameraPosition = 0.05f;
 
     private Vector3 SmoothDampVelocity = Vector3.zero;
 
@@ -60,7 +64,7 @@ public class CameraFollow : MonoBehaviour
             float x = Mathf.SmoothDamp(transform.position.x, playerX, ref SmoothDampVelocity.x, smoothDampTime);
 
 
-            float playerY = Mathf.Max(0.05f, Mathf.Min(levelMax, player.position.y));
+            float playerY = Mathf.Max(minPlayerYBottomCameraPosition, Mathf.Min(levelMax, player.position.y));
 
             float y = Mathf.SmoothDamp(transform.position.y, playerY, ref SmoothDampVelocity.y, smoothDampTime);
 

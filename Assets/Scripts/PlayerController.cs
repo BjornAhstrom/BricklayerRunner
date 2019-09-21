@@ -10,10 +10,18 @@ public class PlayerController : MonoBehaviour
     //public float fallMultiplier = 2.5f;
     //public float lowJumpMultiplier = 2f;
     public LayerMask groundMask;
+    [Range(0, 10)]
+    public float distanceToGround = 2f;
 
     private bool walk, walkLeft, walkRight, jump;
 
     Rigidbody2D rb;
+    Vector3 scale;
+
+    private void Start()
+    {
+        
+    }
 
     private void Awake()
     {
@@ -36,18 +44,60 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        TestUpdatePlayerPosition();
-        //UpdatePlayerPosition();
+        UpdatePlayerPosition();
     }
 
-    void TestUpdatePlayerPosition()
+    void UpdatePlayerPosition()
     {
+        scale = transform.localScale;
+
         float move = Input.GetAxis("Horizontal");
 
         rb.velocity = new Vector2(maxSpeed * move, rb.velocity.y);
+
+            if (walkLeft)
+            {
+                //Debug.Log("Left");
+            scale.x = 0.3f;
+            }
+            if (walkRight)
+            {
+                //Debug.Log("right");
+                scale.x = -0.3f;
+            }
+        transform.localScale = scale;
     }
 
-    
+    void CheckPlayerInput()
+    {
+        bool inputLeft = Input.GetKey(KeyCode.LeftArrow);
+        bool inputRight = Input.GetKey(KeyCode.RightArrow);
+        bool inputJump = Input.GetKey(KeyCode.Space);
+
+        walk = inputLeft || inputRight;
+
+        walkLeft = inputLeft && !inputRight;
+        walkRight = !inputLeft && inputRight;
+
+        jump = inputJump;
+    }
+
+    bool CheckGround()
+    {
+        Vector2 middle = new Vector2(transform.position.x, transform.position.y );  //- (0.65f * 0.5f)
+        RaycastHit2D groundMiddle = Physics2D.Raycast(middle, Vector2.down, distanceToGround, groundMask);
+
+        if (groundMiddle.collider == null)
+        {
+            //Debug.Log("No ground");
+            return false;
+        }
+
+        return true;
+    }
+
+
+
 
 
 
@@ -78,31 +128,4 @@ public class PlayerController : MonoBehaviour
     //    }
     //}
 
-    void CheckPlayerInput()
-    {
-        bool inputLeft = Input.GetKey(KeyCode.LeftArrow);
-        bool inputRight = Input.GetKey(KeyCode.RightArrow);
-        bool inputJump = Input.GetKey(KeyCode.Space);
-
-        walk = inputLeft || inputRight;
-
-        walkLeft = inputLeft && !inputRight;
-        walkRight = !inputLeft && inputRight;
-
-        jump = inputJump;
-    }
-
-    bool CheckGround()
-    {
-        Vector2 middle = new Vector2(transform.position.x, transform.position.y - (0.65f * 0.5f));
-        RaycastHit2D groundMiddle = Physics2D.Raycast(middle, Vector2.down, 0.1f, groundMask);
-
-        if (groundMiddle.collider == null)
-        {
-            //Debug.Log("No ground");
-            return false;
-        }
-
-        return true;
-    }
 }

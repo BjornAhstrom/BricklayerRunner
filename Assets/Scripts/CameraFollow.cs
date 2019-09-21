@@ -46,7 +46,7 @@ public class CameraFollow : MonoBehaviour
     void Update()
     {
         //CameraUpdatePositions();
-        CamerFollowUpdatePosition();
+        CameraFollowUpdatePosition();
     }
 
     void CameraUpdatePositions()
@@ -55,7 +55,7 @@ public class CameraFollow : MonoBehaviour
 
     }
 
-    void CamerFollowUpdatePosition()
+    void CameraFollowUpdatePosition()
     {
         if (player)
         {
@@ -71,6 +71,14 @@ public class CameraFollow : MonoBehaviour
 
             transform.position = new Vector3(x, y, transform.position.z);
 
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.name.Equals("Enemy"))
+        {
+            Debug.Log("Enemy inside camera view");
         }
     }
 

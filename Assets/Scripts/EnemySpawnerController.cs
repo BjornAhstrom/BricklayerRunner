@@ -6,50 +6,60 @@ public class EnemySpawnerController : MonoBehaviour
 {
     [SerializeField]
     GameObject enemySpawnerPrefab;
-
-    [Range(0, 10)]
-    public float spawnDelay = 3f;
-    [Range(0, 10)]
-    public float changeSpeedManufactureClones = 2f;
-    [Range(0, 10)]
-    public float randomSpawning = 1f;
+    [SerializeField]
+    List<Transform> positions = new List<Transform>();
 
     private List<GameObject> enemies = new List<GameObject>();
 
-    private float lastSpawnTime;
-    private float randomSpawnDelay;
+    Vector3 mainCameraCurrentPosition;
+
+    private float leftSideCameraFrame = -12f;
+    private float rightSideCameraFrame = 12f;
+    private float topCameraFrame = 7f;
+    private float bottomCameraFrame = 7f;
+
     private bool stop = false;
 
     private void Start()
     {
+        mainCameraCurrentPosition = Camera.main.transform.position;
+
+        
+
         if (enemySpawnerPrefab == null)
         {
             return;
         }
-        randomSpawnDelay = spawnDelay;
-        SpawnEnemy();
     }
 
     private void Update()
     {
-        if (!stop && Time.time > lastSpawnTime + randomSpawnDelay)
-        {
-            SpawnEnemy();
-        }
+        CheckIfEnemyIsInsideCameraView();
     }
 
-    private void SpawnEnemy()
+    // if camera view is touching the enemy position point, the enemy will arise
+    void CheckIfEnemyIsInsideCameraView()
     {
-        lastSpawnTime = Time.time;
+        mainCameraCurrentPosition = Camera.main.transform.position;
 
-        // Öka eller sänk hastigheten av tillverkingen av kloner
-        lastSpawnTime *= changeSpeedManufactureClones;
-        randomSpawnDelay = Random.Range(spawnDelay - randomSpawning, spawnDelay + randomSpawning);
+        //Debug.Log("Camera position x " + mainCameraCurrentPosition.x + " Camera position y " + mainCameraCurrentPosition.y + " Camera position z " + mainCameraCurrentPosition.z);
 
-        // Skapar enemy klon
-        GameObject enemy = Instantiate(enemySpawnerPrefab);
+        for (int i = 0; i < positions.Count; i++)
+        {
+            if (positions[i].position.x > (mainCameraCurrentPosition.x + leftSideCameraFrame) && positions[i].position.x < (mainCameraCurrentPosition.x + rightSideCameraFrame) && positions[i].position.y > (mainCameraCurrentPosition.y - bottomCameraFrame) && positions[i].position.y < (mainCameraCurrentPosition.y + topCameraFrame) && enemies.Count < 1 && stop == false)
+            {
+                SpawnEnemy(i);
+            }
+        }
+        stop = false;
+    }
 
-        // Lägger till klonen i listan
+    private void SpawnEnemy(int index)
+    {
+        // Creats an enemy clone on a spesific position
+        GameObject enemy = Instantiate(enemySpawnerPrefab, new Vector3(positions[index].position.x, positions[index].position.y, 0), Quaternion.identity);
+
+        // Adds clones to the list
         enemies.Add(enemy);
         EnemyFollowController enemyFollowController = enemy.GetComponentInChildren<EnemyFollowController>();
 
@@ -58,18 +68,18 @@ public class EnemySpawnerController : MonoBehaviour
 
     void DestroyEnemyClone(GameObject enemy)
     {
-        // Ta bort enemy från listan
+        // Removes enemy from the list
         enemies.Remove(enemy);
 
-        // Förstör enemy
+        // Destroy enemy
         Destroy(enemy);
     }
 
-    void Stop()
+    public void Stop()
     {
         stop = true;
 
-        // Gå igenom listan nerifrån och förstör enemies
+        // Goes through the list from below and destroys the clones
         for (int i  = enemies.Count - 1; i >= 0; i--)
         {
             DestroyEnemyClone(enemies[i]);

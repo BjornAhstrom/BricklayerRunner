@@ -16,8 +16,6 @@ public class EnemyFollowController : MonoBehaviour
 
     [SerializeField]
     PlayerController playerController;
-    //[SerializeField]
-    //List<Transform> positions = new List<Transform>();
 
     // Start is called before the first frame update
     void Start()
@@ -30,7 +28,6 @@ public class EnemyFollowController : MonoBehaviour
     {
         CheckIfCollideWithPlayer();
         EnemyFollowThePlayer();
-        
     }
 
     private void FixedUpdate()
@@ -81,10 +78,5 @@ public class EnemyFollowController : MonoBehaviour
             Debug.Log("DEAD ");
             enemySpawnerController.Stop();
         }
-    }
-
-    private void OnBecameInvisible()
-    {
-        Debug.Log("invinsible ");
     }
 }

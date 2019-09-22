@@ -4,16 +4,19 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField] private HealthBarController healthBar;
+
     public Vector2 moveVelocity;
     public float maxSpeed = 10;
     public float jumpVelocity;
-    //public float fallMultiplier = 2.5f;
-    //public float lowJumpMultiplier = 2f;
     public LayerMask groundMask;
-    [Range(0, 10)]
-    public float distanceToGround = 2f;
+    public LayerMask enemyMask;
+
+    [Range(0, 10)] public float distanceToGround = 2f;
 
     private bool walk, walkLeft, walkRight, jump;
+    private bool hitByEnemy = false;
+    private float healthBarStatus = 1.01f;
 
     Rigidbody2D rb;
     Vector3 scale;
@@ -21,6 +24,11 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         
+    }
+
+    private void FixedUpdate()
+    {
+        UpdatePlayerPosition();
     }
 
     private void Awake()
@@ -34,6 +42,7 @@ public class PlayerController : MonoBehaviour
         CheckPlayerInput();
         Jump();
         //UpdatePlayerPosition();
+        CheckIfPlayerCollideWithEnemy();
     }
 
     void Jump()
@@ -42,10 +51,7 @@ public class PlayerController : MonoBehaviour
           rb.velocity = Vector2.up * jumpVelocity;
     }
 
-    private void FixedUpdate()
-    {
-        UpdatePlayerPosition();
-    }
+    
 
     void UpdatePlayerPosition()
     {
@@ -96,36 +102,33 @@ public class PlayerController : MonoBehaviour
         return true;
     }
 
+    void CheckIfPlayerCollideWithEnemy()
+    {
+        Vector2 left = new Vector2(transform.position.x, transform.position.y);
+        RaycastHit2D leftSide = Physics2D.Raycast(left, Vector2.left, 1.2f, enemyMask);
 
+        if (leftSide.collider != null)
+        {
+            Debug.Log("Hit with enemy");
+            hitByEnemy = true;
+            StartCoroutine(Test());
+            
+        }
+        else if (healthBarStatus <= 0.01f)
+        {
+            StopAllCoroutines();
+            hitByEnemy = false;
+        }
+    }
 
-
-
-
-
-
-    //void UpdatePlayerPosition()
-    //{
-    //    //Vector3 pos = transform.localPosition;
-    //    Vector3 scale = transform.localScale;
-
-    //    if (walk)
-    //    {
-    //        if (walkLeft)
-    //        {
-    //            rb.velocity = Vector2.left * moveVelocity;
-
-    //            //Debug.Log("Pressed left");
-    //            scale.x = -1;
-    //        }
-
-    //        else if (walkRight)
-    //        {
-    //            rb.velocity = Vector2.right * moveVelocity;
-
-    //            //Debug.Log("Pressed right");
-    //            scale.x = 1;
-    //        }
-    //    }
-    //}
-
+    IEnumerator Test()
+    {
+        if (hitByEnemy == true)
+        {
+            healthBarStatus -= 0.01f;
+            healthBar.SetStatusOnHealthBar(healthBarStatus);
+            hitByEnemy = false;
+            yield return new WaitForSeconds(1);
+        }
+    }
 }

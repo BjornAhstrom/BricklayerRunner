@@ -17,14 +17,15 @@ public class SpawnEnemy : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         // if collision is player
-        //if (collision.CompareTag(""))
-        //{
+        if (collision.CompareTag("Player"))
+        {
+            GameObject enemy = Instantiate(enemyPrefab);
+            enemy.transform.position = spawnPos.position;
 
-        //}
-        GameObject enemy =  Instantiate(enemyPrefab);
-        enemy.transform.position = spawnPos.position;
-
-        gameObject.SetActive(false);
+            gameObject.SetActive(false);
+        }
+        
+        
     }
 
 }

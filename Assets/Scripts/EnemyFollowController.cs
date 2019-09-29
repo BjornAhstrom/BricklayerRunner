@@ -10,10 +10,20 @@ public class EnemyFollowController : MonoBehaviour
     Rigidbody2D rb;
     SpriteRenderer spriteRenderer;
 
+    [SerializeField] GameObject bar;
+
     [Range(100, 1000)] public float speed = 400f;
+    [Range(0, 0.01f)] public float enemyHealthBarStatusSpeed = 0.005f;
+    public float greenStatusBarHeight = 1f;
+
+    private bool collideWithPlayer = false;
+    private float healthBarStatus = 1.01f;
 
     private void Start()
     {
+
+        bar = GameObject.FindGameObjectWithTag("Bar");   //Find("Bar");
+
         if (playerTransform == null)
         {
             playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
@@ -79,9 +89,24 @@ public class EnemyFollowController : MonoBehaviour
 
         if (hit.collider != null)
         {
-            Debug.Log("Enemy DEAD ");
+            Debug.Log("Hit enemy");
+            collideWithPlayer = true;
+            HealtBarStatus();
+        }
 
-            gameObject.SetActive(false);
+        void HealtBarStatus()
+        {
+            if (collideWithPlayer == true)
+            {
+                healthBarStatus -= enemyHealthBarStatusSpeed;
+                bar.transform.localScale = new Vector2(healthBarStatus, greenStatusBarHeight);
+            }
+            else if (healthBarStatus <= 0.01f)
+            {
+                Debug.Log("Enemy DEAD ");
+                gameObject.SetActive(false);
+                collideWithPlayer = false;
+            }
         }
     }
 

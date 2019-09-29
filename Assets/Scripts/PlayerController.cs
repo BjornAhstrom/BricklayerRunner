@@ -4,31 +4,37 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private HealthBarController healthBar;
+    [SerializeField] private HealthBarForPlayerController healthBarController;
+    [SerializeField] public PlayerSpawnerController playerSpawnerController;
+    [SerializeField] private GameManager gameManager;
+    private PlayerThrowsBrickController playerThrowsBrickController;
+    //[SerializeField] EnemyFollowController enemyFollowController;
 
-    public Vector2 moveVelocity;
-    public float maxSpeed = 10;
-    public float jumpVelocity;
-    public LayerMask groundMask;
-    public LayerMask enemyMask;
-
-    [Range(0, 10)] public float distanceToGround = 2f;
-
-    private bool walk, walkLeft, walkRight, jump;
-    private bool hitByEnemy = false;
+    private bool walk, walkLeft, walkRight, jump, throwBrick;
+    private bool collideWithEnemy = false;
     private float healthBarStatus = 1.01f;
-
+    
     Rigidbody2D rb;
     Vector3 scale;
+    Vector2 position;
+    
 
     private void Start()
     {
-        
+        playerThrowsBrickController = GetComponent<PlayerThrowsBrickController>();
+
     }
 
     private void FixedUpdate()
     {
+        
+    }
+
+    private void LateUpdate()
+    {
         UpdatePlayerPosition();
+        Jump();
+        ThrowBricks();
     }
 
     private void Awake()
@@ -40,18 +46,15 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         CheckPlayerInput();
-        Jump();
-        //UpdatePlayerPosition();
+        
         CheckIfPlayerCollideWithEnemy();
     }
 
     void Jump()
     {
         if (jump && CheckGround())
-          rb.velocity = Vector2.up * jumpVelocity;
+          rb.velocity = Vector2.up * gameManager.playerJumpVelocity;
     }
-
-    
 
     void UpdatePlayerPosition()
     {
@@ -59,19 +62,29 @@ public class PlayerController : MonoBehaviour
 
         float move = Input.GetAxis("Horizontal");
 
-        rb.velocity = new Vector2(maxSpeed * move, rb.velocity.y);
+        rb.velocity = new Vector2(gameManager.playerMaxSpeed * move, rb.velocity.y);
 
             if (walkLeft)
             {
-                //Debug.Log("Left");
             scale.x = 0.3f;
+            position = Vector2.left;
             }
             if (walkRight)
             {
-                //Debug.Log("right");
                 scale.x = -0.3f;
+            position = Vector2.right;
             }
         transform.localScale = scale;
+    }
+
+    void ThrowBricks()
+    {
+        if (throwBrick != false)
+        {
+            StartCoroutine(playerThrowsBrickController.ThrowsBricks(position));
+            
+        }
+        throwBrick = false;
     }
 
     void CheckPlayerInput()
@@ -79,23 +92,24 @@ public class PlayerController : MonoBehaviour
         bool inputLeft = Input.GetKey(KeyCode.LeftArrow);
         bool inputRight = Input.GetKey(KeyCode.RightArrow);
         bool inputJump = Input.GetKey(KeyCode.Space);
+        bool inputThrow = Input.GetButtonDown("Fire1");
 
-        walk = inputLeft || inputRight;
+        //walk = inputLeft || inputRight;
 
         walkLeft = inputLeft && !inputRight;
         walkRight = !inputLeft && inputRight;
-
+        
         jump = inputJump;
+        throwBrick = inputThrow;
     }
 
     bool CheckGround()
     {
         Vector2 middle = new Vector2(transform.position.x, transform.position.y );  //- (0.65f * 0.5f)
-        RaycastHit2D groundMiddle = Physics2D.Raycast(middle, Vector2.down, distanceToGround, groundMask);
+        RaycastHit2D groundMiddle = Physics2D.Raycast(middle, Vector2.down, gameManager.playerDistanceToGround, gameManager.groundMask);
 
         if (groundMiddle.collider == null)
         {
-            //Debug.Log("No ground");
             return false;
         }
 
@@ -104,31 +118,28 @@ public class PlayerController : MonoBehaviour
 
     void CheckIfPlayerCollideWithEnemy()
     {
-        Vector2 left = new Vector2(transform.position.x, transform.position.y);
-        RaycastHit2D leftSide = Physics2D.Raycast(left, Vector2.left, 1.2f, enemyMask);
+        Vector2 originPlayer = new Vector2(transform.position.x, transform.position.y);
+        RaycastHit2D leftSide = Physics2D.Raycast(originPlayer, Vector2.left, gameManager.playerHitDistanceLeftAndRightSideOn, gameManager.enemyMask);
+        RaycastHit2D rightSide = Physics2D.Raycast(originPlayer, Vector2.right, gameManager.playerHitDistanceLeftAndRightSideOn, gameManager.enemyMask);
 
-        if (leftSide.collider != null)
+        if (leftSide.collider != null || rightSide.collider != null)
         {
-            Debug.Log("Hit with enemy");
-            hitByEnemy = true;
-            StartCoroutine(Test());
-            
-        }
-        else if (healthBarStatus <= 0.01f)
-        {
-            StopAllCoroutines();
-            hitByEnemy = false;
+            collideWithEnemy = true;
+            HealtBarStatus();
         }
     }
 
-    IEnumerator Test()
+    void HealtBarStatus()
     {
-        if (hitByEnemy == true)
+        if (collideWithEnemy == true)
         {
-            healthBarStatus -= 0.01f;
-            healthBar.SetStatusOnHealthBar(healthBarStatus);
-            hitByEnemy = false;
-            yield return new WaitForSeconds(1);
+            healthBarStatus -= gameManager.playerHealthBarStatusSpeed;
+            healthBarController.SetStatusOnHealthBar(healthBarStatus);
+        }
+        else if (healthBarStatus <= 0.01f)
+        {
+            collideWithEnemy = false;
+            //playerSpawnerController.Stop();
         }
     }
 }

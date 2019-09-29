@@ -4,79 +4,85 @@ using UnityEngine;
 
 public class EnemyFollowController : MonoBehaviour
 {
-    [HideInInspector]
-    public EnemySpawnerController enemySpawnerController;
-    public LayerMask layerMask;
-    public Transform player;
-    [Range(0, 10)]
-    public float moveSpeed = 5f;
-   
-    private Rigidbody2D rb;
-    private Vector2 movment;
 
-    [SerializeField]
-    PlayerController playerController;
+    Transform playerTransform;
+    [SerializeField] LayerMask playerLayerMask;
+    Rigidbody2D rb;
+    SpriteRenderer spriteRenderer;
 
-    // Start is called before the first frame update
-    void Start()
+    [Range(100, 1000)] public float speed = 400f;
+
+    private void Start()
     {
-        rb = this.GetComponent<Rigidbody2D>();
+        if (playerTransform == null)
+        {
+            playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+        }
+
+        rb = GetComponent<Rigidbody2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
+        WhenEnemyFollowThePlayerChangeScale();
         CheckIfCollideWithPlayer();
-        EnemyFollowThePlayer();
     }
+
 
     private void FixedUpdate()
     {
-        MoveEnemy(movment);
+        MoveEnemyInPlayersDirection();
     }
 
-    // When player comes in the position of the enemy, the enemy will shows up and hunt the player.
-    // if player is on the right side of the enemy the scale.x (angle) will be set to -0.1f, to the left scale.x will be set to 0.1f
-    void EnemyFollowThePlayer()
+    void MoveEnemyInPlayersDirection()
     {
-        Vector3 direction = player.position - transform.position;
-        Vector3 scale = transform.localScale;
-        float angle = Mathf.Atan2(direction.y = 0, direction.x); // * Mathf.Rad2Deg;
+        Vector2 current = rb.transform.position;
+        Vector2 player = playerTransform.position;
 
-        if (player.position.x + 1 >= transform.position.x)
-        {
-            //Debug.Log("Right " + angle);
-            scale.x = -0.1f;
-        }
-        else if (player.position.x <= transform.position.x)
-        {
-            //Debug.Log("Left " + angle);
-            scale.x = 0.1f;
-        }
+        Vector2 direction = new Vector2((player - current).normalized.x, 0);
 
-        transform.localScale = scale;
-        transform.rotation = Quaternion.identity;
+        //rb.AddForce(direction * speed * Time.fixedDeltaTime, ForceMode2D.Impulse);
+        //rb.velocity = Vector2.ClampMagnitude(rb.velocity, 7);
 
-        rb.rotation = angle;
-        direction.Normalize();
-        movment = direction;
-        rb.gravityScale = 10;
+
+        rb.velocity = new Vector2(direction.x * speed * Time.fixedDeltaTime, rb.velocity.y);
+
+        //rb.MovePosition(current + direction * speed * Time.fixedDeltaTime);
+
+        //rb.MovePosition(Vector2.MoveTowards(current, player, speed * Time.fixedDeltaTime));
+
+        //rb.transform.position = Vector2.MoveTowards(current, player, speed * Time.deltaTime);
+
+        //rb.MovePosition((Vector2)transform.position + (direction * enemyMoveSpeed * Time.deltaTime));
     }
 
-    void MoveEnemy(Vector2 direction)
-    {
-        rb.MovePosition((Vector2)transform.position + (direction * moveSpeed * Time.deltaTime));
+    void WhenEnemyFollowThePlayerChangeScale()
+    { 
+
+        if (playerTransform.position.x + 1 >= transform.position.x)
+        {
+            spriteRenderer.flipX = true;
+
+        }
+        else if (playerTransform.position.x <= transform.position.x)
+        {
+            spriteRenderer.flipX = false;
+        }
     }
 
     // If player jump on enemy, the enemy will disappear
     void CheckIfCollideWithPlayer()
     {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.up, 1f, layerMask);
+
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.up, 1f, playerLayerMask);
 
         if (hit.collider != null)
         {
-            Debug.Log("DEAD ");
-            enemySpawnerController.Stop();
+            Debug.Log("Enemy DEAD ");
+
+            gameObject.SetActive(false);
         }
     }
+
 }

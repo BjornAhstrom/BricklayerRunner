@@ -4,10 +4,8 @@ using UnityEngine;
 
 public class EnemySpawnerController : MonoBehaviour
 {
-    [SerializeField]
-    GameObject enemySpawnerPrefab;
-    [SerializeField]
-    List<Transform> positions = new List<Transform>();
+    [SerializeField] GameObject enemySpawnerPrefab;
+    [SerializeField] List<Transform> positions = new List<Transform>();
 
     private List<GameObject> enemies = new List<GameObject>();
 
@@ -63,7 +61,7 @@ public class EnemySpawnerController : MonoBehaviour
         enemies.Add(enemy);
         EnemyFollowController enemyFollowController = enemy.GetComponentInChildren<EnemyFollowController>();
 
-        enemyFollowController.enemySpawnerController = this;
+        //enemyFollowController.enemySpawnerController = this;
     }
 
     void DestroyEnemyClone(GameObject enemy)

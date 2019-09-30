@@ -5,7 +5,8 @@ using UnityEngine;
 public class BrickPileController : MonoBehaviour
 {
     [SerializeField] PlayerThrowsBrickController throwsBrickController;
-    private int bricksAmount = 5;
+    
+    private int bricksAmount = 4;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -13,7 +14,6 @@ public class BrickPileController : MonoBehaviour
         {
             throwsBrickController.CollectBricks(bricksAmount);
             throwsBrickController.initializeBrickPrefabObject();
-
 
             GameObject brickPile = transform.gameObject;
             //Destroy(brickPile);

@@ -8,19 +8,19 @@ public class PlayerController : MonoBehaviour
     [SerializeField] public PlayerSpawnerController playerSpawnerController;
     [SerializeField] private GameManager gameManager;
     private PlayerThrowsBrickController playerThrowsBrickController;
-    //[SerializeField] EnemyFollowController enemyFollowController;
 
     private bool walk, walkLeft, walkRight, jump, throwBrick;
     private float healthBarStatus = 1.01f;
-    
+
+    SpriteRenderer spriteRenderer;
     Rigidbody2D rb;
-    Vector3 scale;
     Vector2 position;
     
 
     private void Start()
     {
         playerThrowsBrickController = GetComponent<PlayerThrowsBrickController>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
 
     }
 
@@ -34,7 +34,6 @@ public class PlayerController : MonoBehaviour
         UpdatePlayerPosition();
         Jump();
         ThrowBricks();
-        
     }
 
     private void Awake()
@@ -47,12 +46,6 @@ public class PlayerController : MonoBehaviour
     {
         CheckPlayerInput();
         CheckIfPlayerCollideWithEnemy();
-
-        //if (healthBarStatus < 0.01f)
-        //{
-        //    Debug.Log("Hej!!!!!!!!");
-        //    collideWithEnemy = false;
-        //}
         HealtBarStatus();
     }
 
@@ -64,23 +57,20 @@ public class PlayerController : MonoBehaviour
 
     void UpdatePlayerPosition()
     {
-        scale = transform.localScale;
-
         float move = Input.GetAxis("Horizontal");
 
         rb.velocity = new Vector2(gameManager.playerMaxSpeed * move, rb.velocity.y);
 
             if (walkLeft)
             {
-            scale.x = 0.3f;
+            spriteRenderer.flipX = false;
             position = Vector2.left;
             }
             if (walkRight)
             {
-                scale.x = -0.3f;
+            spriteRenderer.flipX = true;
             position = Vector2.right;
             }
-        transform.localScale = scale;
     }
 
     void ThrowBricks()

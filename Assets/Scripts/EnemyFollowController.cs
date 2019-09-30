@@ -5,12 +5,13 @@ using UnityEngine;
 public class EnemyFollowController : MonoBehaviour
 {
 
-    Transform playerTransform;
+    
     [SerializeField] LayerMask playerLayerMask;
+
+    Transform playerTransform;
     Rigidbody2D rb;
     SpriteRenderer spriteRenderer;
-
-    [SerializeField] GameObject bar;
+    GameObject bar;
 
     [Range(100, 1000)] public float speed = 400f;
     [Range(0, 0.1f)] public float enemyHealthBarStatusSpeed = 0.01f;
@@ -20,16 +21,14 @@ public class EnemyFollowController : MonoBehaviour
 
     private void Start()
     {
-
-        bar = GameObject.FindGameObjectWithTag("Bar");   //Find("Bar");
+        rb = GetComponent<Rigidbody2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        bar = GameObject.FindGameObjectWithTag("Bar");
 
         if (playerTransform == null)
         {
             playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         }
-
-        rb = GetComponent<Rigidbody2D>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     private void Update()
@@ -84,7 +83,7 @@ public class EnemyFollowController : MonoBehaviour
     // If player jump on enemy, the enemy will disappear
     void CheckIfCollideWithPlayer()
     {
-        Vector2 left = new Vector2(transform.position.x - 0.8f, transform.position.y);
+        Vector2 left = new Vector2(transform.position.x, transform.position.y);
         Vector2 middle = new Vector2(transform.position.x, transform.position.y);
         Vector2 right = new Vector2(transform.position.x + 0.8f, transform.position.y);
 

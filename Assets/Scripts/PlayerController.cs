@@ -11,7 +11,6 @@ public class PlayerController : MonoBehaviour
     //[SerializeField] EnemyFollowController enemyFollowController;
 
     private bool walk, walkLeft, walkRight, jump, throwBrick;
-    private bool collideWithEnemy = false;
     private float healthBarStatus = 1.01f;
     
     Rigidbody2D rb;
@@ -35,6 +34,7 @@ public class PlayerController : MonoBehaviour
         UpdatePlayerPosition();
         Jump();
         ThrowBricks();
+        
     }
 
     private void Awake()
@@ -46,8 +46,14 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         CheckPlayerInput();
-        
         CheckIfPlayerCollideWithEnemy();
+
+        //if (healthBarStatus < 0.01f)
+        //{
+        //    Debug.Log("Hej!!!!!!!!");
+        //    collideWithEnemy = false;
+        //}
+        HealtBarStatus();
     }
 
     void Jump()
@@ -124,22 +130,19 @@ public class PlayerController : MonoBehaviour
 
         if (leftSide.collider != null || rightSide.collider != null)
         {
-            collideWithEnemy = true;
-            HealtBarStatus();
+            //collideWithEnemy = true;
+            healthBarStatus -= gameManager.playerHealthBarStatusSpeed;
+            healthBarController.SetStatusOnHealthBar(healthBarStatus);
+
         }
     }
 
     void HealtBarStatus()
     {
-        if (collideWithEnemy == true)
+        if (healthBarStatus < 0.001f)
         {
-            healthBarStatus -= gameManager.playerHealthBarStatusSpeed;
-            healthBarController.SetStatusOnHealthBar(healthBarStatus);
-        }
-        else if (healthBarStatus <= 0.01f)
-        {
-            collideWithEnemy = false;
-            //playerSpawnerController.Stop();
+            Debug.Log("Player dead");
+            //gameObject.SetActive(false);
         }
     }
 }

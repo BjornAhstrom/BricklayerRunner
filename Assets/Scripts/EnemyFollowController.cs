@@ -13,10 +13,9 @@ public class EnemyFollowController : MonoBehaviour
     [SerializeField] GameObject bar;
 
     [Range(100, 1000)] public float speed = 400f;
-    [Range(0, 0.01f)] public float enemyHealthBarStatusSpeed = 0.005f;
+    [Range(0, 0.1f)] public float enemyHealthBarStatusSpeed = 0.01f;
     public float greenStatusBarHeight = 1f;
 
-    private bool collideWithPlayer = false;
     private float healthBarStatus = 1.01f;
 
     private void Start()
@@ -37,6 +36,7 @@ public class EnemyFollowController : MonoBehaviour
     {
         WhenEnemyFollowThePlayerChangeScale();
         CheckIfCollideWithPlayer();
+        HealtBarStatus();
     }
 
 
@@ -84,29 +84,27 @@ public class EnemyFollowController : MonoBehaviour
     // If player jump on enemy, the enemy will disappear
     void CheckIfCollideWithPlayer()
     {
+        Vector2 left = new Vector2(transform.position.x - 0.8f, transform.position.y);
+        Vector2 middle = new Vector2(transform.position.x, transform.position.y);
+        Vector2 right = new Vector2(transform.position.x + 0.8f, transform.position.y);
 
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.up, 1f, playerLayerMask);
+        RaycastHit2D hitLeft = Physics2D.Raycast(left, Vector2.up, 1f, playerLayerMask);
+        RaycastHit2D hitMiddle = Physics2D.Raycast(middle, Vector2.up, 1f, playerLayerMask);
+        RaycastHit2D hitRight = Physics2D.Raycast(right, Vector2.up, 1f, playerLayerMask);
 
-        if (hit.collider != null)
+        if (hitLeft.collider != null || hitMiddle.collider != null || hitRight.collider != null)
         {
-            Debug.Log("Hit enemy");
-            collideWithPlayer = true;
-            HealtBarStatus();
+            healthBarStatus -= enemyHealthBarStatusSpeed;
+            bar.transform.localScale = new Vector2(healthBarStatus, greenStatusBarHeight);
         }
+    }
 
-        void HealtBarStatus()
+    void HealtBarStatus()
+    {
+        if (healthBarStatus <= 0.01f)
         {
-            if (collideWithPlayer == true)
-            {
-                healthBarStatus -= enemyHealthBarStatusSpeed;
-                bar.transform.localScale = new Vector2(healthBarStatus, greenStatusBarHeight);
-            }
-            else if (healthBarStatus <= 0.01f)
-            {
-                Debug.Log("Enemy DEAD ");
-                gameObject.SetActive(false);
-                collideWithPlayer = false;
-            }
+            Debug.Log("Enemy DEAD ");
+            gameObject.SetActive(false);
         }
     }
 

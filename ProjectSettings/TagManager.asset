@@ -8,6 +8,7 @@ TagManager:
   - Enemy
   - HealthBar
   - Bar
+  - Brick
   layers:
   - Default
   - TransparentFX
@@ -47,4 +48,10 @@ TagManager:
     locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Brick
+    uniqueID: 222658761
+    locked: 0
+  - name: Player
+    uniqueID: 935967555
     locked: 0

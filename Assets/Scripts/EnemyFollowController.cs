@@ -6,7 +6,9 @@ public class EnemyFollowController : MonoBehaviour
 {
 
     
-    [SerializeField] LayerMask playerLayerMask;
+    [SerializeField] LayerMask layerMask;
+    //[SerializeField] LayerMask brickLayerMask;
+    [SerializeField] GameObject brickPrefab;
 
     Transform playerTransform;
     Rigidbody2D rb;
@@ -34,7 +36,7 @@ public class EnemyFollowController : MonoBehaviour
     private void Update()
     {
         WhenEnemyFollowThePlayerChangeScale();
-        CheckIfCollideWithPlayer();
+        CheckIfCollideWithPlayerOrBricks();
         HealtBarStatus();
     }
 
@@ -81,20 +83,20 @@ public class EnemyFollowController : MonoBehaviour
     }
 
     // If player jump on enemy, the enemy will disappear
-    void CheckIfCollideWithPlayer()
+    void CheckIfCollideWithPlayerOrBricks()
     {
-        Vector2 left = new Vector2(transform.position.x, transform.position.y);
-        Vector2 middle = new Vector2(transform.position.x, transform.position.y);
-        Vector2 right = new Vector2(transform.position.x + 0.8f, transform.position.y);
+        Vector2 topLeft = new Vector2(transform.position.x - 0.8f, transform.position.y);
+        Vector2 topMiddle = new Vector2(transform.position.x, transform.position.y);
+        Vector2 topRight = new Vector2(transform.position.x + 0.8f, transform.position.y);
 
-        RaycastHit2D hitLeft = Physics2D.Raycast(left, Vector2.up, 1f, playerLayerMask);
-        RaycastHit2D hitMiddle = Physics2D.Raycast(middle, Vector2.up, 1f, playerLayerMask);
-        RaycastHit2D hitRight = Physics2D.Raycast(right, Vector2.up, 1f, playerLayerMask);
+        RaycastHit2D hitTopLeft = Physics2D.Raycast(topLeft, Vector2.up, 1f, layerMask);
+        RaycastHit2D hitTopMiddle = Physics2D.Raycast(topMiddle, Vector2.up, 1f, layerMask);
+        RaycastHit2D hitTopRight = Physics2D.Raycast(topRight, Vector2.up, 1f, layerMask);
 
-        if (hitLeft.collider != null || hitMiddle.collider != null || hitRight.collider != null)
+        if (hitTopLeft.collider != null || hitTopMiddle.collider != null || hitTopRight.collider != null)
         {
             healthBarStatus -= enemyHealthBarStatusSpeed;
-            bar.transform.localScale = new Vector2(healthBarStatus, greenStatusBarHeight);
+            UpdateHealthBarStatus();
         }
     }
 
@@ -105,6 +107,21 @@ public class EnemyFollowController : MonoBehaviour
             Debug.Log("Enemy DEAD ");
             gameObject.SetActive(false);
         }
+
     }
 
+    void UpdateHealthBarStatus()
+    {
+        bar.transform.localScale = new Vector2(healthBarStatus, greenStatusBarHeight);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Brick"))
+        {
+            Debug.Log("Hit enemy with " + collision.transform.name);
+            healthBarStatus -= 0.34f;
+            UpdateHealthBarStatus();
+        }
+    }
 }

@@ -4,110 +4,54 @@ using UnityEngine;
 
 public class CameraFollow : MonoBehaviour
 {
-    [SerializeField] private GameManager gameManager;
     [SerializeField] Transform player;
-   
-    [Range(-10, 10)] public float xLed = 0f;
-    [Range(-10, 10)] public float yLed = 0f;
-    [Range(-10, 10)] public float zLed = -10f;
-    [Range(-10, 10)] public float levelMin;
-    [Range(-10, 10)] public float levelMax;
 
-    [Range(0, 1)] public float cameraSmoothDampTime = 0.30f;
-    [Range(0, 10)] public float camerOrthographicSize = 2.1f;
+    [Range(0, 1)] public float smoothDampTime = 0.15f;
+    [Range(0, 10)] public float cameraOrthographicSize = 2.1f;
     [Range(-10, 10)] public float cameraMinPlayerYBottomCameraPosition = 0.05f;
     [Range(-10, 10)] public float cameraMaxPlayerYTopCameraPosition = 0.05f;
 
-    //float camHeight;
-    //float camWidth;
+    public Transform leftBounds;
+    public Transform rightBounds;
 
-    public float smoothTime = 0.3f;
-    private Vector3 velocity = Vector3.zero;
-
-    private Vector3 offset;
     private Vector3 smoothDampVelocity = Vector3.zero;
+    private int splitScreen = 2;
+    private float camWidth;
+    private float camHeigt;
+    private float levelMinX;
+    private float levelMaxX;
+    private float leftBoundWidth;
+    private float rightBoundsWidth;
+    private float playerX;
+    private float playerY;
+    private float x;
+    private float y;
 
     private void Start()
     {
+        camHeigt = Camera.main.orthographicSize * cameraOrthographicSize;
+        camWidth = camHeigt * Camera.main.aspect;
+
+        leftBoundWidth = leftBounds.GetComponentInChildren<SpriteRenderer>().bounds.size.x / splitScreen;
+        rightBoundsWidth = rightBounds.GetComponentInChildren<SpriteRenderer>().bounds.size.x / splitScreen;
+
+        levelMinX = leftBounds.position.x + leftBoundWidth + (camWidth / splitScreen);
+        levelMaxX = rightBounds.position.x + rightBoundsWidth - (camWidth / splitScreen);
     }
 
     private void Update()
     {
-        offset.x = xLed;
-        offset.y = yLed;
-        offset.z = zLed - 10;
+        if (player)
+        {
+            playerX = Mathf.Max(levelMinX, Mathf.Min(levelMaxX, player.position.x));
 
-        CameraUpdatePositionFromPlayer();
+            x = Mathf.SmoothDamp(transform.position.x, playerX, ref smoothDampVelocity.x, smoothDampTime);
 
+            playerY = Mathf.Max(cameraMinPlayerYBottomCameraPosition, Mathf.Min(levelMaxX, player.position.y));
 
-        //Vector3 targetPosition = player.TransformPoint(new Vector3(5, 5, -10));
+            y = Mathf.SmoothDamp(transform.position.y, playerY, ref smoothDampVelocity.y, smoothDampTime);
 
-        //transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref velocity, smoothTime);
-
-        
+            transform.position = new Vector3(x, y, transform.position.z);
+        }
     }
-
-    void CameraUpdatePositionFromPlayer()
-    {
-        transform.position = new Vector3(player.position.x + offset.x, player.position.y + offset.y, offset.z);
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    //void CameraFollowUpdatePosition()
-    //{
-    //    if (player)
-    //    {
-    //        float playerX = Mathf.Max(levelMin, Mathf.Min(levelMax, player.position.x));
-
-    //        float x = Mathf.SmoothDamp(transform.position.x, playerX, ref smoothDampVelocity.x, cameraSmoothDampTime);
-
-
-    //        float playerY = Mathf.Max(cameraMinPlayerYBottomCameraPosition, Mathf.Min(levelMax, player.position.y));
-
-    //        float y = Mathf.SmoothDamp(transform.position.y, playerY, ref smoothDampVelocity.y, cameraSmoothDampTime);
-
-
-    //        transform.position = new Vector3(x, y, transform.position.z);
-
-    //    }
-    //}
-
-
-
-
-    //private Vector3 SmoothDampVelocity = Vector3.zero;
-
-    //private float camWidth, camHeight, levelMin, levelMax, levelMaxTop, levelMinBottom;
-
-    //// Start is called before the first frame update
-    //void Start()
-    //{
-    //    camHeight = Camera.main.orthographicSize * gameManager.camerOrthographicSize;
-    //    camWidth = camHeight * Camera.main.aspect;
-
-    //    float leftBoundsWidth = leftBounds.GetComponentInChildren<SpriteRenderer>().bounds.size.x / 2;
-    //    float rightBoundsWidth = rightBounds.GetComponentInChildren<SpriteRenderer>().bounds.size.x / 2;
-    //    float topBoundsHeigth = topBounds.GetComponentInChildren<SpriteRenderer>().bounds.size.y / 2;
-    //    float bottomBoundsHeigt = bottomBounds.GetComponentInChildren<SpriteRenderer>().bounds.size.y / 2;
-
-    //    levelMin = leftBounds.position.x + leftBoundsWidth + (camWidth / 2);
-    //    levelMax = rightBounds.position.x - rightBoundsWidth - (camWidth / 2);
-
-    //    levelMaxTop = topBounds.position.y + topBoundsHeigth + (camHeight / 2);
-    //    levelMinBottom = bottomBounds.position.y - bottomBoundsHeigt - (camHeight / 2);
-
-
-    //}
 }

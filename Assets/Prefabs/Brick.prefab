@@ -15,11 +15,11 @@ GameObject:
   - component: {fileID: 2245865677899797333}
   m_Layer: 12
   m_Name: Brick
-  m_TagString: Untagged
+  m_TagString: Brick
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6426640394760511951
 Transform:
   m_ObjectHideFlags: 0
@@ -69,8 +69,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 222658761
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 57c2b84c400744124aeb83f543c5bad2, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -142,9 +142,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0af0addf9f50a43be9f2674abb666ecd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyMask:
+  layerMask:
     serializedVersion: 2
     m_Bits: 1536
-  groundMask:
-    serializedVersion: 2
-    m_Bits: 0
+  raycastLengthRightAndLeftSide: 1
+  raycastLengtBottomAndTop: 0.3

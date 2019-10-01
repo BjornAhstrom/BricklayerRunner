@@ -16,7 +16,7 @@ public class BrickPileController : MonoBehaviour
             throwsBrickController.initializeBrickPrefabObject();
 
             GameObject brickPile = transform.gameObject;
-            //Destroy(brickPile);
+            Destroy(brickPile);
 
         }
     }

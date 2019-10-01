@@ -12,6 +12,8 @@ public class PlayerThrowsBrickController : MonoBehaviour
     public int playersCurrentBricks = 0;
     public List<Rigidbody2D> bricks = new List<Rigidbody2D>();
 
+    private GameObject brick;
+
     private void Start()
     {
         playerController = GetComponent<PlayerController>();
@@ -21,7 +23,7 @@ public class PlayerThrowsBrickController : MonoBehaviour
     {
             for (int i = 0; i < playersCurrentBricks; i++)
             {
-                GameObject brick = Instantiate(brickPrefab);
+                brick = Instantiate(brickPrefab);
                 brick.SetActive(false);
 
                 Rigidbody2D rb = brick.GetComponent<Rigidbody2D>();
@@ -48,9 +50,9 @@ public class PlayerThrowsBrickController : MonoBehaviour
 
             if (rb != null && playersCurrentBricks > 0)
             {
-               rb.transform.position = transform.position;
+            rb.transform.position = transform.position;
 
-                rb.AddForce(position * brickSpeed);
+            rb.AddForce(position * brickSpeed);
             playersCurrentBricks--;
             yield return 0;
         }

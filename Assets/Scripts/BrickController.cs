@@ -4,25 +4,35 @@ using UnityEngine;
 
 public class BrickController : MonoBehaviour
 {
-    [SerializeField] LayerMask enemyMask;
-    [SerializeField] LayerMask groundMask;
+    [SerializeField] LayerMask layerMask;
+
+    [Range(0, 5)] public float raycastLengthRightAndLeftSide = 0f;
+    [Range(0, 5)] public float raycastLengtBottomAndTop = 0f;
 
     private void Update()
     {
-        CheckIfHitEnemyWithBricks();
+       // CheckIfHit();
     }
 
-    void CheckIfHitEnemyWithBricks()
+    void CheckIfHit()
     {
         Vector2 originBrick = new Vector2(transform.position.x, transform.position.y);
-        RaycastHit2D leftSideBrick = Physics2D.Raycast(originBrick, Vector2.left, 1f, enemyMask, groundMask);
-        RaycastHit2D rightSideBrick = Physics2D.Raycast(originBrick, Vector2.right, 1f, enemyMask, groundMask);
-        RaycastHit2D upSideBrick = Physics2D.Raycast(originBrick, Vector2.up, 0.3f, enemyMask, groundMask);
-        RaycastHit2D bottomSideBrick = Physics2D.Raycast(originBrick, Vector2.down, 0.3f, enemyMask, groundMask);
+        RaycastHit2D leftSideBrick = Physics2D.Raycast(originBrick, Vector2.left, raycastLengthRightAndLeftSide, layerMask);
+        RaycastHit2D rightSideBrick = Physics2D.Raycast(originBrick, Vector2.right, raycastLengthRightAndLeftSide, layerMask);
+        RaycastHit2D upSideBrick = Physics2D.Raycast(originBrick, Vector2.up, raycastLengtBottomAndTop, layerMask);
+        RaycastHit2D bottomSideBrick = Physics2D.Raycast(originBrick, Vector2.down, raycastLengtBottomAndTop, layerMask);
  
         if (leftSideBrick.collider != null || rightSideBrick.collider != null || upSideBrick.collider != null || bottomSideBrick.collider != null)
         {
-            Debug.Log("Collide with ");
+            //Debug.Log("Hit");
+            gameObject.SetActive(false);
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Enemy"))
+        {
             gameObject.SetActive(false);
         }
     }

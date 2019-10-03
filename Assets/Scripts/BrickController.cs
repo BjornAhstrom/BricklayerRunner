@@ -6,12 +6,12 @@ public class BrickController : MonoBehaviour
 {
     [SerializeField] LayerMask layerMask;
 
-    [Range(0, 5)] public float raycastLengthRightAndLeftSide = 0f;
-    [Range(0, 5)] public float raycastLengtBottomAndTop = 0f;
+    [Range(0, 5)] public float raycastLengthRightAndLeftSide = 1f;
+    [Range(0, 5)] public float raycastLengtBottomAndTop = 0.5f;
 
     private void Update()
     {
-       // CheckIfHit();
+       //CheckIfHit();
     }
 
     void CheckIfHit()
@@ -32,6 +32,10 @@ public class BrickController : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Enemy"))
+        {
+            gameObject.SetActive(false);
+        }
+        else if (collision.IsTouchingLayers(layerMask))
         {
             gameObject.SetActive(false);
         }

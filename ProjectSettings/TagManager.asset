@@ -9,6 +9,11 @@ TagManager:
   - HealthBar
   - Bar
   - Brick
+  - LeftArrowButton
+  - RightArrowButton
+  - BrickPile
+  - HealtBarPlayer
+  - GameManager
   layers:
   - Default
   - TransparentFX
@@ -24,7 +29,7 @@ TagManager:
   - BrickPile
   - Brick
   - MainCamera
-  - 
+  - Inputs
   - 
   - 
   - 

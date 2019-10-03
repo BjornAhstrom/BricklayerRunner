@@ -7,13 +7,6 @@ public class SpawnEnemy : MonoBehaviour
     public GameObject enemyPrefab;
     public Transform spawnPos;
   
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
         // if collision is player

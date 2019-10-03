@@ -4,8 +4,13 @@ using UnityEngine;
 
 public class BrickPileController : MonoBehaviour
 {
-    [SerializeField] PlayerThrowsBrickController throwsBrickController;
-    
+    PlayerThrowsBrickController throwsBrickController;
+
+    private void Start()
+    {
+        throwsBrickController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerThrowsBrickController>(); 
+    }
+
     private int bricksAmount = 4;
 
     private void OnTriggerEnter2D(Collider2D collision)

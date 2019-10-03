@@ -5,104 +5,162 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private HealthBarForPlayerController healthBarController;
-    [SerializeField] public PlayerSpawnerController playerSpawnerController;
     [SerializeField] private GameManager gameManager;
     private PlayerThrowsBrickController playerThrowsBrickController;
 
-    private bool walk, walkLeft, walkRight, jump, throwBrick;
+    [SerializeField] LayerMask groundMask;
+    [Range(0, 10)] public float playerDistanceToGround = 1.2f;
+    [Range(0, 30)] public float playerJumpVelocity = 17f;
+
+    [Range(100, 1000)] public float moveSpeed = 450f;
+    [Range(1, 10)] public float jumpForce = 5f;
+
+    public bool moveLeft;
+    public bool dontMove;
+
+
+    //private bool walk, walkLeft, walkRight, jump, throwBrick;
     private float healthBarStatus = 1.01f;
 
     SpriteRenderer spriteRenderer;
     Rigidbody2D rb;
     Vector2 position;
-    
 
     private void Start()
     {
         playerThrowsBrickController = GetComponent<PlayerThrowsBrickController>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-
-    }
-
-    private void FixedUpdate()
-    {
-        
-    }
-
-    private void LateUpdate()
-    {
-        UpdatePlayerPosition();
-        Jump();
-        ThrowBricks();
-    }
-
-    private void Awake()
-    {
         rb = GetComponent<Rigidbody2D>();
+        dontMove = true;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        CheckPlayerInput();
         CheckIfPlayerCollideWithEnemy();
         HealtBarStatus();
     }
 
-    void Jump()
+    private void FixedUpdate()
     {
-        if (jump && CheckGround())
-          rb.velocity = Vector2.up * gameManager.playerJumpVelocity;
+        HandleMove();
     }
 
-    void UpdatePlayerPosition()
+    void HandleMove()
     {
-        float move = Input.GetAxis("Horizontal");
-
-        rb.velocity = new Vector2(gameManager.playerMaxSpeed * move, rb.velocity.y);
-
-            if (walkLeft)
-            {
-            spriteRenderer.flipX = false;
-            position = Vector2.left;
-            }
-            if (walkRight)
-            {
-            spriteRenderer.flipX = true;
-            position = Vector2.right;
-            }
-    }
-
-    void ThrowBricks()
-    {
-        if (throwBrick != false)
+        if (dontMove)
         {
-            StartCoroutine(playerThrowsBrickController.ThrowsBricks(position));
-            
+            StopMoving();
+        } else
+        {
+            if (moveLeft)
+            {
+                MoveLeft();
+            }
+            else if (!moveLeft)
+            {
+                MoveRight();
+            }
         }
-        throwBrick = false;
-    }
+    } 
 
-    void CheckPlayerInput()
+    public void AllowMovment(bool movment)
     {
-        bool inputLeft = Input.GetKey(KeyCode.LeftArrow);
-        bool inputRight = Input.GetKey(KeyCode.RightArrow);
-        bool inputJump = Input.GetKey(KeyCode.Space);
-        bool inputThrow = Input.GetButtonDown("Fire1");
+        dontMove = false;
+        moveLeft = movment;
 
-        //walk = inputLeft || inputRight;
-
-        walkLeft = inputLeft && !inputRight;
-        walkRight = !inputLeft && inputRight;
-        
-        jump = inputJump;
-        throwBrick = inputThrow;
     }
+
+    public void DontAllowMovment()
+    {
+        dontMove = true;
+    }
+
+    public void Jump()
+    {
+        if (CheckGround())
+        {
+            rb.velocity = Vector2.up * playerJumpVelocity;
+        }
+    }
+
+    void MoveLeft()
+    {
+        spriteRenderer.flipX = false;
+        Vector2 move = Vector2.left;
+        position = move; // Position the player in the direction it throws bricks
+        rb.velocity = new Vector2(move.x * moveSpeed * Time.fixedDeltaTime, rb.velocity.y);
+    }
+
+    void MoveRight()
+    {
+        spriteRenderer.flipX = true;
+        Vector2 move = Vector2.right;
+        position = move; // Position the player in the direction it throws bricks
+        rb.velocity = new Vector2(move.x * moveSpeed * Time.fixedDeltaTime, rb.velocity.y);
+    }
+
+    void StopMoving()
+    {
+        rb.velocity = new Vector2(0f, rb.velocity.y);
+    }
+
+    public void ThrowBricks()
+    {
+            StartCoroutine(playerThrowsBrickController.ThrowsBricks(position));
+    }
+
+    //private void OnCollisionEnter2D(Collision2D collision)
+    //{
+    //    if (collision.gameObject.tag == "Ground")
+    //    {
+    //        canJump = true;
+    //    }
+    //}
+
+    //private void OnCollisionExit2D(Collision2D collision)
+    //{
+    //    if (collision.gameObject.tag == "Ground")
+    //    {
+    //        canJump = false;
+    //    }
+    //}
+
+    //void UpdatePlayerPosition()
+    //{
+    //    float move = Input.GetAxis("Horizontal");
+
+    //    rb.velocity = new Vector2(gameManager.playerMaxSpeed * move, rb.velocity.y);
+
+    //        if (walkLeft)
+    //        {
+    //        spriteRenderer.flipX = false;
+    //        position = Vector2.left;
+    //        }
+    //        if (walkRight)
+    //        {
+    //        spriteRenderer.flipX = true;
+    //        position = Vector2.right;
+    //        }
+    //}
+
+    //void CheckPlayerInput()
+    //{
+    //    bool inputLeft = Input.GetKey(KeyCode.LeftArrow);
+    //    bool inputRight = Input.GetKey(KeyCode.RightArrow);
+    //    bool inputJump = Input.GetKey(KeyCode.Space);
+    //    bool inputThrow = Input.GetButtonDown("Fire1");
+
+    //    walkLeft = inputLeft && !inputRight;
+    //    walkRight = !inputLeft && inputRight;
+        
+    //    jump = inputJump;
+    //    throwBrick = inputThrow;
+    //}
 
     bool CheckGround()
     {
-        Vector2 middle = new Vector2(transform.position.x, transform.position.y );  //- (0.65f * 0.5f)
-        RaycastHit2D groundMiddle = Physics2D.Raycast(middle, Vector2.down, gameManager.playerDistanceToGround, gameManager.groundMask);
+        Vector2 middle = new Vector2(transform.position.x, transform.position.y);  //- (0.65f * 0.5f)
+        RaycastHit2D groundMiddle = Physics2D.Raycast(middle, Vector2.down, playerDistanceToGround, groundMask);
 
         if (groundMiddle.collider == null)
         {

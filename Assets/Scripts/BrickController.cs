@@ -6,12 +6,16 @@ public class BrickController : MonoBehaviour
 {
     [SerializeField] LayerMask layerMask;
 
-    [Range(0, 5)] public float raycastLengthRightAndLeftSide = 1f;
-    [Range(0, 5)] public float raycastLengtBottomAndTop = 0.5f;
+    [Range(0, 5)] public float raycastLengthRightAndLeftSide = 0.5f;
+    [Range(0, 5)] public float raycastLengtBottomAndTop = 0.1f;
+
+    private float destroyDelayWhenEnemyHit = 0.01f;
+    private float destroyDelay = 2f;
 
     private void Update()
     {
-       //CheckIfHit();
+        //CheckIfHit();
+        StartCoroutine(MakeBrickDisappear());
     }
 
     void CheckIfHit()
@@ -21,23 +25,37 @@ public class BrickController : MonoBehaviour
         RaycastHit2D rightSideBrick = Physics2D.Raycast(originBrick, Vector2.right, raycastLengthRightAndLeftSide, layerMask);
         RaycastHit2D upSideBrick = Physics2D.Raycast(originBrick, Vector2.up, raycastLengtBottomAndTop, layerMask);
         RaycastHit2D bottomSideBrick = Physics2D.Raycast(originBrick, Vector2.down, raycastLengtBottomAndTop, layerMask);
- 
+
         if (leftSideBrick.collider != null || rightSideBrick.collider != null || upSideBrick.collider != null || bottomSideBrick.collider != null)
         {
-            //Debug.Log("Hit");
             gameObject.SetActive(false);
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnEnable()
     {
-        if (collision.CompareTag("Enemy"))
+        Debug.Log("brick enabled");
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        Debug.Log("brick");
+
+        if (collision.transform.CompareTag("Enemy"))
         {
-            gameObject.SetActive(false);
+            StartCoroutine(DealyHitWithEnemy());
         }
-        else if (collision.IsTouchingLayers(layerMask))
-        {
-            gameObject.SetActive(false);
-        }
+    }
+
+    IEnumerator DealyHitWithEnemy()
+    {
+        yield return new WaitForSeconds(destroyDelayWhenEnemyHit);
+        gameObject.SetActive(false);
+    }
+
+    IEnumerator MakeBrickDisappear()
+    {
+        yield return new WaitForSeconds(destroyDelay);
+        gameObject.SetActive(false);
     }
 }

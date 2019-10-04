@@ -54,11 +54,13 @@ public class PlayerThrowsBrickController : MonoBehaviour
 
             rb.AddForce(position * brickSpeed);
             playersCurrentBricks--;
-            yield return 0;
+            //yield return 0;
+            yield return new WaitForEndOfFrame();
+            brickPrefab.gameObject.SetActive(false);
         }
     }
 
-    // Samlar tegelstenar från BricksController
+    // Collect bricks from BricksController
     public void CollectBricks(int collectBricksamount)
     {
         playersCurrentBricks += collectBricksamount;

@@ -5,7 +5,7 @@ using UnityEngine;
 public class EnemyFollowController : MonoBehaviour
 {
 
-    
+
     [SerializeField] LayerMask layerMask;
     //[SerializeField] LayerMask brickLayerMask;
     [SerializeField] GameObject brickPrefab;
@@ -14,18 +14,21 @@ public class EnemyFollowController : MonoBehaviour
     Rigidbody2D rb;
     SpriteRenderer spriteRenderer;
     GameObject bar;
+    SpriteRenderer sprite;
 
     [Range(100, 1000)] public float speed = 400f;
     [Range(0, 0.1f)] public float enemyHealthBarStatusSpeed = 0.01f;
     public float greenStatusBarHeight = 1f;
 
     private float healthBarStatus = 1.01f;
+    private bool hit = true;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         bar = GameObject.FindGameObjectWithTag("Bar");
+        sprite = GetComponent<SpriteRenderer>();
 
         if (playerTransform == null)
         {
@@ -36,7 +39,7 @@ public class EnemyFollowController : MonoBehaviour
     private void Update()
     {
         WhenEnemyFollowThePlayerChangeScale();
-        CheckIfCollideWithPlayerOrBricks();
+        //CheckIfCollideWithPlayerOrBricks();
         HealtBarStatus();
     }
 
@@ -69,7 +72,7 @@ public class EnemyFollowController : MonoBehaviour
     }
 
     void WhenEnemyFollowThePlayerChangeScale()
-    { 
+    {
 
         if (playerTransform.position.x + 1 >= transform.position.x)
         {
@@ -100,12 +103,51 @@ public class EnemyFollowController : MonoBehaviour
         }
     }
 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        Vector2 posUp = Vector2.up;
+
+        if (collision.transform.CompareTag("Brick") && hit)
+        {
+            healthBarStatus -= 0.34f;
+            UpdateHealthBarStatus();
+
+            hit = false;
+
+           // Debug.Log("Hit is  " + hit);
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
+        {
+            healthBarStatus -= 0.34f;
+            UpdateHealthBarStatus();
+
+            hit = false;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.transform.CompareTag("Brick") || collision.transform.CompareTag("Player") && hit == false)
+        {
+            StartCoroutine(SetHitToTrue());
+        }
+    }
+
     void HealtBarStatus()
     {
         if (healthBarStatus <= 0.01f)
         {
-            Debug.Log("Enemy DEAD ");
-            gameObject.SetActive(false);
+            StartCoroutine(InactivateEnemy());
+            StartCoroutine(SetHitToTrue());
         }
 
     }
@@ -115,13 +157,37 @@ public class EnemyFollowController : MonoBehaviour
         bar.transform.localScale = new Vector2(healthBarStatus, greenStatusBarHeight);
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+IEnumerator SetHitToTrue()
     {
-        if (collision.CompareTag("Brick"))
-        {
-            Debug.Log("Hit enemy with " + collision.transform.name);
-            healthBarStatus -= 0.34f;
-            UpdateHealthBarStatus();
-        }
+        yield return new WaitForSeconds(0.2f);
+        hit = true;
+    }
+
+    IEnumerator InactivateEnemy()
+    {
+        Color color = sprite.color;
+        SpriteRenderer healtBar = GetComponent<SpriteRenderer>();
+
+        Color healthBarColor = healtBar.color;
+
+        yield return new WaitForSeconds(0.2f);
+        healthBarColor.a = 0;
+        healtBar.color = healthBarColor;
+        color.a = 0;
+        sprite.color = color;
+
+        yield return new WaitForSeconds(0.2f);
+        healthBarColor.a = 1;
+        healtBar.color = healthBarColor;
+        color.a = 1;
+        sprite.color = color;
+
+        yield return new WaitForSeconds(0.2f);
+        healthBarColor.a = 0;
+        healtBar.color = healthBarColor;
+        color.a = 0;
+        sprite.color = color;
+
+        gameObject.SetActive(false);
     }
 }

@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private HealthBarForPlayerController healthBarController;
-    [SerializeField] private GameManager gameManager;
+    private HealthBarForPlayerController healthBarController;
+    private GameManager gameManager;
     private PlayerThrowsBrickController playerThrowsBrickController;
 
     [SerializeField] LayerMask groundMask;
@@ -28,6 +28,8 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
+        healthBarController = GameObject.FindGameObjectWithTag("HealtBarPlayer").GetComponent<HealthBarForPlayerController>();
+        gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
         playerThrowsBrickController = GetComponent<PlayerThrowsBrickController>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
@@ -77,9 +79,11 @@ public class PlayerController : MonoBehaviour
 
     public void Jump()
     {
+        Vector2 jump = Vector2.up;
+
         if (CheckGround())
         {
-            rb.velocity = Vector2.up * playerJumpVelocity;
+            rb.velocity = jump * playerJumpVelocity;
         }
     }
 
@@ -89,6 +93,7 @@ public class PlayerController : MonoBehaviour
         Vector2 move = Vector2.left;
         position = move; // Position the player in the direction it throws bricks
         rb.velocity = new Vector2(move.x * moveSpeed * Time.fixedDeltaTime, rb.velocity.y);
+        
     }
 
     void MoveRight()
@@ -101,7 +106,7 @@ public class PlayerController : MonoBehaviour
 
     void StopMoving()
     {
-        rb.velocity = new Vector2(0f, rb.velocity.y);
+        rb.velocity = new Vector2(Mathf.SmoothStep(0f, 1f, Time.fixedDeltaTime), rb.velocity.y);//0f, rb.velocity.y);
     }
 
     public void ThrowBricks()
@@ -160,7 +165,9 @@ public class PlayerController : MonoBehaviour
     bool CheckGround()
     {
         Vector2 middle = new Vector2(transform.position.x, transform.position.y);  //- (0.65f * 0.5f)
-        RaycastHit2D groundMiddle = Physics2D.Raycast(middle, Vector2.down, playerDistanceToGround, groundMask);
+                                                                                   // RaycastHit2D groundMiddle = Physics2D.Raycast(middle, Vector2.down, playerDistanceToGround, groundMask);
+
+        RaycastHit2D groundMiddle = Physics2D.BoxCast(middle, new Vector2(0.8f, 0.8f), 0f, Vector2.down, playerDistanceToGround, groundMask);
 
         if (groundMiddle.collider == null)
         {
@@ -168,6 +175,11 @@ public class PlayerController : MonoBehaviour
         }
 
         return true;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireCube(transform.position + Vector3.down * playerDistanceToGround, new Vector3(0.8f,0.8f, 1f));
     }
 
     void CheckIfPlayerCollideWithEnemy()

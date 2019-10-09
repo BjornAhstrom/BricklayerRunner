@@ -1,10 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class CameraFollow : MonoBehaviour
 {
-    [SerializeField] Transform player;
+    [SerializeField] GameObject player;
+    [SerializeField] TextMeshPro scoreText;
+    [SerializeField] GameObject scoreSign;
 
     [Range(0, 1)] public float smoothDampTime = 0.15f;
     [Range(0, 10)] public float cameraOrthographicSize = 2.1f;
@@ -13,6 +16,7 @@ public class CameraFollow : MonoBehaviour
 
     public Transform leftBounds;
     public Transform rightBounds;
+    public Vector2 scoreTextOffset;
 
     private Vector3 smoothDampVelocity = Vector3.zero;
     private int splitScreen = 2;
@@ -43,15 +47,29 @@ public class CameraFollow : MonoBehaviour
     {
         if (player)
         {
-            playerX = Mathf.Max(levelMinX, Mathf.Min(levelMaxX, player.position.x));
+            playerX = Mathf.Max(levelMinX, Mathf.Min(levelMaxX, player.transform.position.x));
 
             x = Mathf.SmoothDamp(transform.position.x, playerX, ref smoothDampVelocity.x, smoothDampTime);
 
-            playerY = Mathf.Max(cameraMinPlayerYBottomCameraPosition, Mathf.Min(levelMaxX, player.position.y));
+            playerY = Mathf.Max(cameraMinPlayerYBottomCameraPosition, Mathf.Min(levelMaxX, player.transform.position.y));
 
             y = Mathf.SmoothDamp(transform.position.y, playerY, ref smoothDampVelocity.y, smoothDampTime);
 
             transform.position = new Vector3(x, y, transform.position.z);
         }
+
+        scoreSign.transform.position = new Vector2(transform.position.x + scoreTextOffset.x, transform.position.y + scoreTextOffset.y);
+
+
+        UpdateScoreText(player.GetComponent<PlayerController>().playerScore);
+    }
+
+    void UpdateScoreText(int newScore)
+    {
+        int currentScore = 0;
+
+        currentScore += newScore;
+
+        scoreText.text = "Score" + "\n" + currentScore;
     }
 }

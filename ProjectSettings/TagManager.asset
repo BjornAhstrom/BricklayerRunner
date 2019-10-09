@@ -14,6 +14,9 @@ TagManager:
   - BrickPile
   - HealtBarPlayer
   - GameManager
+  - Water
+  - Grass
+  - OverWater
   layers:
   - Default
   - TransparentFX
@@ -30,7 +33,7 @@ TagManager:
   - Brick
   - MainCamera
   - Inputs
-  - 
+  - Water
   - 
   - 
   - 
@@ -54,9 +57,15 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Player
+    uniqueID: 935967555
+    locked: 0
+  - name: Water
+    uniqueID: 343573243
+    locked: 0
   - name: Brick
     uniqueID: 222658761
     locked: 0
-  - name: Player
-    uniqueID: 935967555
+  - name: PlayerButtons
+    uniqueID: 1373827811
     locked: 0

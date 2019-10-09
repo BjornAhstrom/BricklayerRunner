@@ -39,8 +39,6 @@ public class BrickController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log("brick");
-
         if (collision.transform.CompareTag("Enemy"))
         {
             StartCoroutine(DealyHitWithEnemy());

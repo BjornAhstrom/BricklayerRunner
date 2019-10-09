@@ -4,17 +4,16 @@ using UnityEngine;
 
 public class EnemyFollowController : MonoBehaviour
 {
-
-
     [SerializeField] LayerMask layerMask;
-    //[SerializeField] LayerMask brickLayerMask;
-    [SerializeField] GameObject brickPrefab;
+    //[SerializeField] GameObject brickPrefab;
 
-    Transform playerTransform;
+    GameObject playerController;
     Rigidbody2D rb;
     SpriteRenderer spriteRenderer;
-    GameObject bar;
+    public GameObject bar;
     SpriteRenderer sprite;
+
+    float enemyHeight;
 
     [Range(100, 1000)] public float speed = 400f;
     [Range(0, 0.1f)] public float enemyHealthBarStatusSpeed = 0.01f;
@@ -27,19 +26,18 @@ public class EnemyFollowController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-        bar = GameObject.FindGameObjectWithTag("Bar");
         sprite = GetComponent<SpriteRenderer>();
 
-        if (playerTransform == null)
+        if (playerController == null)
         {
-            playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+            playerController = GameObject.FindGameObjectWithTag("Player");
         }
     }
 
     private void Update()
     {
-        WhenEnemyFollowThePlayerChangeScale();
-        //CheckIfCollideWithPlayerOrBricks();
+        enemyHeight = transform.position.y / 2;
+        WhenEnemyFollowThePlayerFlipXValue();
         HealtBarStatus();
     }
 
@@ -52,7 +50,7 @@ public class EnemyFollowController : MonoBehaviour
     void MoveEnemyInPlayersDirection()
     {
         Vector2 current = rb.transform.position;
-        Vector2 player = playerTransform.position;
+        Vector2 player = playerController.transform.position; // playerTransform.position;
 
         Vector2 direction = new Vector2((player - current).normalized.x, 0);
 
@@ -71,74 +69,94 @@ public class EnemyFollowController : MonoBehaviour
         //rb.MovePosition((Vector2)transform.position + (direction * enemyMoveSpeed * Time.deltaTime));
     }
 
-    void WhenEnemyFollowThePlayerChangeScale()
+    void WhenEnemyFollowThePlayerFlipXValue()
     {
+        Vector2 scale = transform.localScale;
 
-        if (playerTransform.position.x + 1 >= transform.position.x)
+        if (playerController.transform.position.x + 1 >= transform.position.x)
         {
             spriteRenderer.flipX = true;
-
         }
-        else if (playerTransform.position.x <= transform.position.x)
+        else if (playerController.transform.position.x <= transform.position.x)
         {
             spriteRenderer.flipX = false;
         }
     }
 
-    // If player jump on enemy, the enemy will disappear
-    void CheckIfCollideWithPlayerOrBricks()
+    //// If player jump on enemy, the enemy will disappear
+    //void CheckIfCollideWithPlayerOrBricks()
+    //{
+    //    Vector2 topLeft = new Vector2(transform.position.x - 0.8f, transform.position.y);
+    //    Vector2 topMiddle = new Vector2(transform.position.x, transform.position.y);
+    //    Vector2 topRight = new Vector2(transform.position.x + 0.8f, transform.position.y);
+
+    //    RaycastHit2D hitTopLeft = Physics2D.Raycast(topLeft, Vector2.up, 1f, layerMask);
+    //    RaycastHit2D hitTopMiddle = Physics2D.Raycast(topMiddle, Vector2.up, 1f, layerMask);
+    //    RaycastHit2D hitTopRight = Physics2D.Raycast(topRight, Vector2.up, 1f, layerMask);
+
+    //    if (hitTopLeft.collider != null || hitTopMiddle.collider != null || hitTopRight.collider != null)
+    //    {
+    //        healthBarStatus -= enemyHealthBarStatusSpeed;
+    //        UpdateHealthBarStatus();
+    //    }
+    //}
+
+        void CheckIfPlayerJumpOnHead()
     {
-        Vector2 topLeft = new Vector2(transform.position.x - 0.8f, transform.position.y);
-        Vector2 topMiddle = new Vector2(transform.position.x, transform.position.y);
-        Vector2 topRight = new Vector2(transform.position.x + 0.8f, transform.position.y);
+        Vector2 origin = new Vector2(transform.position.x, transform.position.y);
 
-        RaycastHit2D hitTopLeft = Physics2D.Raycast(topLeft, Vector2.up, 1f, layerMask);
-        RaycastHit2D hitTopMiddle = Physics2D.Raycast(topMiddle, Vector2.up, 1f, layerMask);
-        RaycastHit2D hitTopRight = Physics2D.Raycast(topRight, Vector2.up, 1f, layerMask);
+        RaycastHit2D checkPlayerOnHead = Physics2D.BoxCast(origin, new Vector2(0.5f, 0.3f), 0, Vector2.up, 1f, layerMask);
 
-        if (hitTopLeft.collider != null || hitTopMiddle.collider != null || hitTopRight.collider != null)
+        if (checkPlayerOnHead.collider != null && hit != false)
         {
-            healthBarStatus -= enemyHealthBarStatusSpeed;
+            Debug.Log("Player jump on head");
+            healthBarStatus -= 0.34f;
             UpdateHealthBarStatus();
+            playerController.GetComponent<PlayerController>().playerScore += 10;
         }
+
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireCube(transform.position + Vector3.up * 1f, new Vector3(0.5f, 0.3f, 0));
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Vector2 posUp = Vector2.up;
+        if (collision.transform.CompareTag("Player"))
+        {
+            //Vector2 direction = collision.transform.position - transform.position;
+
+            //Debug.Log("Head hit 1");
+
+            //if (direction.y > enemyHeight)
+            //{
+            //    Debug.Log("Head hit 2");
+
+            //    healthBarStatus -= 0.34f;
+            //    UpdateHealthBarStatus();
+            //    playerController.GetComponent<PlayerController>().playerScore += 10;
+
+            //    hit = false;
+            //}
+            CheckIfPlayerJumpOnHead();
+        }
 
         if (collision.transform.CompareTag("Brick") && hit)
         {
             healthBarStatus -= 0.34f;
             UpdateHealthBarStatus();
-
-            hit = false;
-
-           // Debug.Log("Hit is  " + hit);
-        }
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Player"))
-        {
-            healthBarStatus -= 0.34f;
-            UpdateHealthBarStatus();
+            playerController.GetComponent<PlayerController>().playerScore += 10;
 
             hit = false;
         }
     }
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        
-    }
-
     private void OnCollisionExit2D(Collision2D collision)
     {
-        if (collision.transform.CompareTag("Brick") || collision.transform.CompareTag("Player") && hit == false)
+        if (collision.transform.CompareTag("Brick") && hit == false) // || collision.transform.CompareTag("Player")
         {
-            StartCoroutine(SetHitToTrue());
+            StartCoroutine(SetHitTo(true));
         }
     }
 
@@ -147,9 +165,8 @@ public class EnemyFollowController : MonoBehaviour
         if (healthBarStatus <= 0.01f)
         {
             StartCoroutine(InactivateEnemy());
-            StartCoroutine(SetHitToTrue());
+            StartCoroutine(SetHitTo(true));
         }
-
     }
 
     void UpdateHealthBarStatus()
@@ -157,10 +174,10 @@ public class EnemyFollowController : MonoBehaviour
         bar.transform.localScale = new Vector2(healthBarStatus, greenStatusBarHeight);
     }
 
-IEnumerator SetHitToTrue()
+IEnumerator SetHitTo(bool trueOrFalse)
     {
         yield return new WaitForSeconds(0.2f);
-        hit = true;
+        hit = trueOrFalse;
     }
 
     IEnumerator InactivateEnemy()

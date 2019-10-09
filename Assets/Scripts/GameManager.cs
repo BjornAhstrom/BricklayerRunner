@@ -6,14 +6,15 @@ public class GameManager : MonoBehaviour
 {
     public Vector2 playerMoveVelocity;
     public LayerMask groundMask;
-    public LayerMask enemyMask;
+    //public LayerMask enemyMask;
     public LayerMask playerLayerMask;
 
     [Range(0, 20)] public float playerMaxSpeed = 10f;
     [Range(0, 30)] public float playerJumpVelocity = 17f;
-    [Range(0, 0.01f)] public float playerHealthBarStatusSpeed = 0.005f;
+    //[Range(0, 0.01f)] public float playerHealthBarStatusSpeed = 0.005f;
     [Range(0, 10)] public float playerDistanceToGround = 1.2f;
-    [Range(0, 5)] public float playerHitDistanceLeftAndRightSideOn = 1.2f;
+
+    //[Range(0, 5)] public float playerHitDistanceLeftAndRightSideOn = 1.2f;
 
     [Range(0, 10)] public float enemyMoveSpeed = 5f;
 

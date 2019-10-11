@@ -5,18 +5,18 @@ using TMPro;
 
 public class CameraFollow : MonoBehaviour
 {
-    [SerializeField] GameObject player;
-    [SerializeField] TextMeshPro scoreText;
-    [SerializeField] GameObject scoreSign;
+    //[SerializeField] PlayerController player;
 
+    GameObject player;
+   
     [Range(0, 1)] public float smoothDampTime = 0.15f;
     [Range(0, 10)] public float cameraOrthographicSize = 2.1f;
     [Range(-10, 10)] public float cameraMinPlayerYBottomCameraPosition = 0.05f;
     [Range(-10, 10)] public float cameraMaxPlayerYTopCameraPosition = 0.05f;
 
+    public Transform topBounds;
     public Transform leftBounds;
     public Transform rightBounds;
-    public Vector2 scoreTextOffset;
 
     private Vector3 smoothDampVelocity = Vector3.zero;
     private int splitScreen = 2;
@@ -41,35 +41,31 @@ public class CameraFollow : MonoBehaviour
 
         levelMinX = leftBounds.position.x + leftBoundWidth + (camWidth / splitScreen);
         levelMaxX = rightBounds.position.x + rightBoundsWidth - (camWidth / splitScreen);
+
+        
     }
 
     private void Update()
     {
-        if (player)
+        CameraFollowSmooth();
+
+    }
+
+    void CameraFollowSmooth()
+    {
+        if (PlayerController.Instance)
         {
-            playerX = Mathf.Max(levelMinX, Mathf.Min(levelMaxX, player.transform.position.x));
+            playerX = Mathf.Max(levelMinX, Mathf.Min(levelMaxX, PlayerController.Instance.transform.position.x));
 
             x = Mathf.SmoothDamp(transform.position.x, playerX, ref smoothDampVelocity.x, smoothDampTime);
 
-            playerY = Mathf.Max(cameraMinPlayerYBottomCameraPosition, Mathf.Min(levelMaxX, player.transform.position.y));
+            playerY = Mathf.Max(cameraMinPlayerYBottomCameraPosition, Mathf.Min(levelMaxX, PlayerController.Instance.transform.position.y));
 
             y = Mathf.SmoothDamp(transform.position.y, playerY, ref smoothDampVelocity.y, smoothDampTime);
 
             transform.position = new Vector3(x, y, transform.position.z);
         }
-
-        scoreSign.transform.position = new Vector2(transform.position.x + scoreTextOffset.x, transform.position.y + scoreTextOffset.y);
-
-
-        UpdateScoreText(player.GetComponent<PlayerController>().playerScore);
     }
 
-    void UpdateScoreText(int newScore)
-    {
-        int currentScore = 0;
-
-        currentScore += newScore;
-
-        scoreText.text = "Score" + "\n" + currentScore;
-    }
+    
 }

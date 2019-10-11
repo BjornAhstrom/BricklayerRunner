@@ -59,7 +59,7 @@ public class EnemySpawnerController : MonoBehaviour
 
         // Adds clones to the list
         enemies.Add(enemy);
-        EnemyFollowController enemyFollowController = enemy.GetComponentInChildren<EnemyFollowController>();
+        EnemyController enemyFollowController = enemy.GetComponentInChildren<EnemyController>();
 
         //enemyFollowController.enemySpawnerController = this;
     }

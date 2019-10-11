@@ -32,10 +32,10 @@ public class BrickController : MonoBehaviour
         }
     }
 
-    private void OnEnable()
-    {
-        Debug.Log("brick enabled");
-    }
+    //private void OnEnable()
+    //{
+    //    Debug.Log("brick enabled");
+    //}
 
     private void OnCollisionEnter2D(Collision2D collision)
     {

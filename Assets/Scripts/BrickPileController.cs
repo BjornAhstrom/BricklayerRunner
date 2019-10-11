@@ -8,7 +8,7 @@ public class BrickPileController : MonoBehaviour
 
     private void Start()
     {
-        throwsBrickController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerThrowsBrickController>(); 
+        throwsBrickController = GameObject.FindGameObjectWithTag("GameManager").GetComponent<PlayerThrowsBrickController>(); 
     }
 
     private int bricksAmount = 4;

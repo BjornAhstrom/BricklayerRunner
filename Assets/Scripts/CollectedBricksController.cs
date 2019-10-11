@@ -8,12 +8,19 @@ public class CollectedBricksController : MonoBehaviour
     [SerializeField] PlayerThrowsBrickController playerThrowsBrickController;
 
     public Vector2 offset;
-    public CameraFollow camera;
+    //public CameraFollow camera;
     TextMeshPro collectedBricksText;
     public int bricksAmount = 0;
+
+    private Vector3 mainCameraPosition;
+
     // Start is called before the first frame update
     void Start()
     {
+        if (playerThrowsBrickController == null)
+        {
+            playerThrowsBrickController = GetComponent<PlayerThrowsBrickController>();
+        } 
         collectedBricksText = GetComponentInChildren<TextMeshPro>();
         collectedBricksText.text = bricksAmount.ToString();
     }
@@ -21,6 +28,7 @@ public class CollectedBricksController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Debug.Log("Collected bricks " + bricksAmount);
         CollectedBricksÍmageAndTextSetTopRight();
         UpdateBricksAmountText();
     }
@@ -33,7 +41,7 @@ public class CollectedBricksController : MonoBehaviour
 
     void CollectedBricksÍmageAndTextSetTopRight()
     {
-        transform.position = new Vector2(camera.transform.position.x + offset.x, camera.transform.position.y + offset.y);
-
+        mainCameraPosition = Camera.main.transform.position;
+        transform.position = new Vector3(mainCameraPosition.x + offset.x, mainCameraPosition.y + offset.y);
     }
 }

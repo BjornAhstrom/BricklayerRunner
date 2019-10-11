@@ -396,7 +396,11 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 256
+  positions: {fileID: 0}
+  playerController: {fileID: 5109250656746219877, guid: e53b69b4913f3446499fab221e001786,
+    type: 3}
   bar: {fileID: 7067187992757358563}
+  playerScore: 0
   speed: 110
   enemyHealthBarStatusSpeed: 0.019
   greenStatusBarHeight: 1
@@ -408,7 +412,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5588865667740547619}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 316a673498ac44b79a74bf2b56355bca, type: 2}
   m_CullingMode: 0

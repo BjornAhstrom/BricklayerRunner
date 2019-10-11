@@ -2,68 +2,44 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PatrolBehaviour : StateMachineBehaviour
+public class ChaseBeahviour : StateMachineBehaviour
 {
-    //public GameObject enemeyPatrolPointsPrefab;
-    //Transform enemyPatrolPoints;
     Transform playerTransform;
     EnemyController enemy;
-
-    public float patrolSpeed = 250f;
-
-    int randomPointsIndex;
-    int playerDistanceHash = Animator.StringToHash("DistanceToPlayer");
     Rigidbody2D rb;
 
-
+    public float enemyFollowSpeed = 400f;
+    int distansToPlayerHash = Animator.StringToHash("DistanceToPlayer");
 
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         enemy = animator.gameObject.GetComponent<EnemyController>();
+        rb = enemy.GetComponent<Rigidbody2D>();
 
         if (playerTransform == null)
         {
             playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         }
 
-        randomPointsIndex = Random.Range(0, enemy.positions.childCount);
-        if (rb == null)
-        {
-            rb = animator.gameObject.GetComponent<Rigidbody2D>();
-        }
-            
-
-        rb.velocity = Vector3.zero;
-
-        //Debug.Log("!!!!nemy patrol positions " + rb.velocity);
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         Vector2 current = animator.transform.position;
-        Vector2 target = new Vector2( enemy.positions.GetChild(randomPointsIndex).position.x, current.y);
+        Vector2 target = playerTransform.position;
 
         Vector2 direction = new Vector2((target - current).normalized.x, 0);
-        //Vector2 target =  enemyPatrolPoints.GetChild(randomPointsIndex).position;
 
-        Vector2 player = playerTransform.position;
+        rb.velocity = new Vector2(direction.x * enemyFollowSpeed * Time.deltaTime, rb.velocity.y);
 
-        float playerDistance = Vector2.Distance(current, player);
-        animator.SetFloat(playerDistanceHash, playerDistance);
-       
+        
 
+        //animator.transform.position = Vector2.MoveTowards(current, target, enemyFollowSpeed * Time.deltaTime);
 
-        if (Vector2.Distance(current, target) > 0.1f)
-        {
-            rb.velocity = new Vector2(direction.x * patrolSpeed * Time.deltaTime, rb.velocity.y);
-            //animator.transform.position = Vector2.MoveTowards(current, target, speed * Time.deltaTime);
-        }
-        else
-        {
-            randomPointsIndex = Random.Range(0, enemy.positions.childCount);
-        }
+        animator.SetFloat(distansToPlayerHash, Vector2.Distance(current, target));
+
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state

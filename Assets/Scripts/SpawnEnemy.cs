@@ -13,6 +13,8 @@ public class SpawnEnemy : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             GameObject enemy = Instantiate(enemyPrefab);
+            enemy.GetComponent<EnemyController>().positions = transform.GetChild(0);
+
             enemy.transform.position = spawnPos.position;
 
             gameObject.SetActive(false);

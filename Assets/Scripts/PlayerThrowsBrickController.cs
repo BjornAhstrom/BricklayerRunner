@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerThrowsBrickController : MonoBehaviour
 {
-    PlayerController playerController;
+    //PlayerController playerController;
 
     [Range(500, 5000)] public float brickSpeed = 1000f;
 
@@ -16,8 +16,12 @@ public class PlayerThrowsBrickController : MonoBehaviour
 
     private void Start()
     {
-        playerController = GetComponent<PlayerController>();
+        //playerController = GetComponent<PlayerController>();
     }
+    //private void Update()
+    //{
+    //    Debug.Log("Collected bricks " + playersCurrentBricks);
+    //}
 
     public void initializeBrickPrefabObject()
     {
@@ -46,16 +50,19 @@ public class PlayerThrowsBrickController : MonoBehaviour
     
     public IEnumerator ThrowsBricks(Vector2 position)
     {
-            Rigidbody2D rb = GetBrick();
+        
+        Rigidbody2D rb = GetBrick();
 
-            if (rb != null && playersCurrentBricks > 0)
+        if (rb != null && playersCurrentBricks > 0)
             {
-            rb.transform.position = transform.position;
+            Debug.Log("Throw brick ");
+            rb.transform.position = PlayerController.Instance.transform.position;
+           
 
             rb.AddForce(position * brickSpeed);
             playersCurrentBricks--;
-            //yield return 0;
-            yield return new WaitForEndOfFrame();
+            yield return 0;
+            //yield return new WaitForEndOfFrame();
             brickPrefab.gameObject.SetActive(false);
         }
     }

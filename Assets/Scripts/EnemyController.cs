@@ -2,18 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyFollowController : MonoBehaviour
+public class EnemyController : MonoBehaviour
 {
     [SerializeField] LayerMask layerMask;
     //[SerializeField] GameObject brickPrefab;
 
-    GameObject playerController;
+    [HideInInspector] public Transform positions;
+
+    //[SerializeField] PlayerController playerController;
     Rigidbody2D rb;
     SpriteRenderer spriteRenderer;
-    public GameObject bar;
     SpriteRenderer sprite;
-
+    public GameObject bar;
+    [SerializeField] public int playerScore = 0;
+    
     float enemyHeight;
+    float deathDelay = 0.2f;
 
     [Range(100, 1000)] public float speed = 400f;
     [Range(0, 0.1f)] public float enemyHealthBarStatusSpeed = 0.01f;
@@ -28,10 +32,10 @@ public class EnemyFollowController : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         sprite = GetComponent<SpriteRenderer>();
 
-        if (playerController == null)
-        {
-            playerController = GameObject.FindGameObjectWithTag("Player");
-        }
+        //if (playerController == null)
+        //{
+        //    playerController = GetComponent<PlayerController>(); //GameObject.FindGameObjectWithTag("Player");
+        //}
     }
 
     private void Update()
@@ -42,42 +46,42 @@ public class EnemyFollowController : MonoBehaviour
     }
 
 
-    private void FixedUpdate()
-    {
-        MoveEnemyInPlayersDirection();
-    }
+    //private void FixedUpdate()
+    //{
+    //    //MoveEnemyInPlayersDirection();
+    //}
 
-    void MoveEnemyInPlayersDirection()
-    {
-        Vector2 current = rb.transform.position;
-        Vector2 player = playerController.transform.position; // playerTransform.position;
+    //void MoveEnemyInPlayersDirection()
+    //{
+    //    Vector2 current = rb.transform.position;
+    //    Vector2 player = playerController.transform.position; // playerTransform.position;
 
-        Vector2 direction = new Vector2((player - current).normalized.x, 0);
+    //    Vector2 direction = new Vector2((player - current).normalized.x, 0);
 
-        //rb.AddForce(direction * speed * Time.fixedDeltaTime, ForceMode2D.Impulse);
-        //rb.velocity = Vector2.ClampMagnitude(rb.velocity, 7);
+    //    //rb.AddForce(direction * speed * Time.fixedDeltaTime, ForceMode2D.Impulse);
+    //    //rb.velocity = Vector2.ClampMagnitude(rb.velocity, 7);
 
 
-        rb.velocity = new Vector2(direction.x * speed * Time.fixedDeltaTime, rb.velocity.y);
+    //    rb.velocity = new Vector2(direction.x * speed * Time.fixedDeltaTime, rb.velocity.y);
 
-        //rb.MovePosition(current + direction * speed * Time.fixedDeltaTime);
+    //    //rb.MovePosition(current + direction * speed * Time.fixedDeltaTime);
 
-        //rb.MovePosition(Vector2.MoveTowards(current, player, speed * Time.fixedDeltaTime));
+    //    //rb.MovePosition(Vector2.MoveTowards(current, player, speed * Time.fixedDeltaTime));
 
-        //rb.transform.position = Vector2.MoveTowards(current, player, speed * Time.deltaTime);
+    //    //rb.transform.position = Vector2.MoveTowards(current, player, speed * Time.deltaTime);
 
-        //rb.MovePosition((Vector2)transform.position + (direction * enemyMoveSpeed * Time.deltaTime));
-    }
+    //    //rb.MovePosition((Vector2)transform.position + (direction * enemyMoveSpeed * Time.deltaTime));
+    //}
 
     void WhenEnemyFollowThePlayerFlipXValue()
     {
         Vector2 scale = transform.localScale;
 
-        if (playerController.transform.position.x + 1 >= transform.position.x)
+        if (PlayerController.Instance.transform.position.x + 1 >= transform.position.x)
         {
             spriteRenderer.flipX = true;
         }
-        else if (playerController.transform.position.x <= transform.position.x)
+        else if (PlayerController.Instance.transform.position.x <= transform.position.x)
         {
             spriteRenderer.flipX = false;
         }
@@ -100,22 +104,6 @@ public class EnemyFollowController : MonoBehaviour
     //        UpdateHealthBarStatus();
     //    }
     //}
-
-        void CheckIfPlayerJumpOnHead()
-    {
-        Vector2 origin = new Vector2(transform.position.x, transform.position.y);
-
-        RaycastHit2D checkPlayerOnHead = Physics2D.BoxCast(origin, new Vector2(0.5f, 0.3f), 0, Vector2.up, 1f, layerMask);
-
-        if (checkPlayerOnHead.collider != null && hit != false)
-        {
-            Debug.Log("Player jump on head");
-            healthBarStatus -= 0.34f;
-            UpdateHealthBarStatus();
-            playerController.GetComponent<PlayerController>().playerScore += 10;
-        }
-
-    }
 
     private void OnDrawGizmos()
     {
@@ -145,13 +133,33 @@ public class EnemyFollowController : MonoBehaviour
 
         if (collision.transform.CompareTag("Brick") && hit)
         {
+            PlayerController.Instance.playerScore += 10;
+            //Debug.Log("Enemy hit " + playerScore + " points");
             healthBarStatus -= 0.34f;
             UpdateHealthBarStatus();
-            playerController.GetComponent<PlayerController>().playerScore += 10;
+            
 
             hit = false;
         }
     }
+
+    void CheckIfPlayerJumpOnHead()
+    {
+        Vector2 origin = new Vector2(transform.position.x, transform.position.y);
+
+        RaycastHit2D checkPlayerOnHead = Physics2D.BoxCast(origin, new Vector2(0.5f, 0.3f), 0, Vector2.up, 1f, layerMask);
+
+        if (checkPlayerOnHead.collider != null && hit != false)
+        {
+            //Debug.Log("Player jump on head");
+            PlayerController.Instance.playerScore += 10;
+            healthBarStatus -= 0.34f;
+            UpdateHealthBarStatus();
+            
+        }
+
+    }
+
     private void OnCollisionExit2D(Collision2D collision)
     {
         if (collision.transform.CompareTag("Brick") && hit == false) // || collision.transform.CompareTag("Player")
@@ -187,19 +195,19 @@ IEnumerator SetHitTo(bool trueOrFalse)
 
         Color healthBarColor = healtBar.color;
 
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(deathDelay);
         healthBarColor.a = 0;
         healtBar.color = healthBarColor;
         color.a = 0;
         sprite.color = color;
 
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(deathDelay);
         healthBarColor.a = 1;
         healtBar.color = healthBarColor;
         color.a = 1;
         sprite.color = color;
 
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(deathDelay);
         healthBarColor.a = 0;
         healtBar.color = healthBarColor;
         color.a = 0;

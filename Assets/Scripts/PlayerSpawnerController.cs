@@ -14,7 +14,7 @@ public class PlayerSpawnerController : MonoBehaviour
 
     IEnumerator PlayerStartPosition()
     {
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(0.2f);
 
         GameObject player = Instantiate(playerPrefab);
         player.transform.position = startPosition.position;

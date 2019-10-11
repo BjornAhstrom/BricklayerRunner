@@ -5,7 +5,7 @@ using TMPro;
 
 public class GameManager : MonoBehaviour
 {
-    public Vector2 playerMoveVelocity;
+    //public Vector2 playerMoveVelocity;
     public LayerMask groundMask;
     public LayerMask playerLayerMask;
     public float greenStatusBarHeight = 1f;

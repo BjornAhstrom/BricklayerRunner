@@ -32,11 +32,8 @@ public class PatrolBehaviour : StateMachineBehaviour
         {
             rb = animator.gameObject.GetComponent<Rigidbody2D>();
         }
-            
 
         rb.velocity = Vector3.zero;
-
-        //Debug.Log("!!!!nemy patrol positions " + rb.velocity);
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
@@ -46,19 +43,14 @@ public class PatrolBehaviour : StateMachineBehaviour
         Vector2 target = new Vector2( enemy.positions.GetChild(randomPointsIndex).position.x, current.y);
 
         Vector2 direction = new Vector2((target - current).normalized.x, 0);
-        //Vector2 target =  enemyPatrolPoints.GetChild(randomPointsIndex).position;
-
         Vector2 player = playerTransform.position;
 
         float playerDistance = Vector2.Distance(current, player);
         animator.SetFloat(playerDistanceHash, playerDistance);
        
-
-
         if (Vector2.Distance(current, target) > 0.1f)
         {
             rb.velocity = new Vector2(direction.x * patrolSpeed * Time.deltaTime, rb.velocity.y);
-            //animator.transform.position = Vector2.MoveTowards(current, target, speed * Time.deltaTime);
         }
         else
         {

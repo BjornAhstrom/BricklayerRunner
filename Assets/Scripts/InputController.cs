@@ -31,9 +31,7 @@ public class InputController : MonoBehaviour
 
     void Update()
     {
-        //CheckIfPlayerCollideWithEnemy();
         PlayerController.Instance.HealtBarStatus();
-        //UpdateScoreText(playerScore);
     }
 
     private void FixedUpdate()

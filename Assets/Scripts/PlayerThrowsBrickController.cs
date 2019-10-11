@@ -55,7 +55,6 @@ public class PlayerThrowsBrickController : MonoBehaviour
 
         if (rb != null && playersCurrentBricks > 0)
             {
-            Debug.Log("Throw brick ");
             rb.transform.position = PlayerController.Instance.transform.position;
            
 

@@ -14,9 +14,12 @@ public class PlayerSpawnerController : MonoBehaviour
 
     IEnumerator PlayerStartPosition()
     {
+        PlayerController.Instance.gameObject.SetActive(false);
+
+        PlayerController.Instance.transform.position = startPosition.position;
+
         yield return new WaitForSeconds(0.2f);
 
-        GameObject player = Instantiate(playerPrefab);
-        player.transform.position = startPosition.position;
+        PlayerController.Instance.gameObject.SetActive(true);
     }
 }

@@ -28,7 +28,6 @@ public class CollectedBricksController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log("Collected bricks " + bricksAmount);
         CollectedBricksÍmageAndTextSetTopRight();
         UpdateBricksAmountText();
     }

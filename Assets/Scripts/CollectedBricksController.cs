@@ -12,7 +12,7 @@ public class CollectedBricksController : MonoBehaviour
     TextMeshPro collectedBricksText;
     public int bricksAmount = 0;
 
-    private Vector3 mainCameraPosition;
+    private Vector2 mainCameraPosition;
 
     // Start is called before the first frame update
     void Start()
@@ -41,6 +41,6 @@ public class CollectedBricksController : MonoBehaviour
     void CollectedBricksÍmageAndTextSetTopRight()
     {
         mainCameraPosition = Camera.main.transform.position;
-        transform.position = new Vector3(mainCameraPosition.x + offset.x, mainCameraPosition.y + offset.y);
+        transform.position = new Vector2(mainCameraPosition.x + offset.x, mainCameraPosition.y + offset.y);
     }
 }

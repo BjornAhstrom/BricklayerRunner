@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] LayerMask groundMask;
     [SerializeField] LayerMask enemyMask;
     [HideInInspector] public int playerScore = 0;
+    public LifeController lifeController;
 
     [Range(0, 10)] public float playerDistanceToGround = 1.2f;
     [Range(0, 0.01f)] public float playerHealthBarStatusSpeed = 0.005f;
@@ -16,6 +17,8 @@ public class PlayerController : MonoBehaviour
 
     public float greenStatusBarHeight = 1f;
     public float healthBarStatus = 1f;
+    public bool gameOver = false;
+    public int startLives = 3;
 
     private static PlayerController _instance;
 
@@ -49,7 +52,8 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        
+        lifeController = GameObject.FindGameObjectWithTag("Life").GetComponent<LifeController>();
+        lifeController.InitializeLife(startLives);
     }
 
     void Update()
@@ -93,18 +97,23 @@ public class PlayerController : MonoBehaviour
     {
         if (healthBarStatus < 0.001f)
         {
-           // Debug.Log("Player dead");
-            gameObject.SetActive(false);
+            Debug.Log("Loos life");
+            lifeController.RemoveLives();
             healthBarStatus = 1.0f;
-            //StartCoroutine(GoToMainMenu());
-            SceneManager.LoadScene("MainMenu");
-        }
-    }
+            startLives--;
 
-    IEnumerator GoToMainMenu()
-    {
-        yield return new WaitForSeconds(2);
-        
+            if (startLives <= 0)
+            {
+
+                Debug.Log("Dead");
+                //gameObject.SetActive(false);
+                //gameOver = true;
+                //healthBarStatus = 1.0f;
+
+                //SceneManager.LoadScene("MainMenu");
+            }
+            
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

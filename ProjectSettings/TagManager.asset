@@ -17,6 +17,7 @@ TagManager:
   - Water
   - Grass
   - OverWater
+  - Life
   layers:
   - Default
   - TransparentFX

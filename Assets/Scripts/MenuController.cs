@@ -8,7 +8,7 @@ public class MenuController : MonoBehaviour
 {
     [SerializeField] TextMeshPro scoreText;
 
-    private AsyncOperation async;
+    //private AsyncOperation async;
     private int currentTopScore = 0;
 
     // Start is called before the first frame update
@@ -17,12 +17,12 @@ public class MenuController : MonoBehaviour
         PlayerController.Instance.gameObject.SetActive(false);
         IncreaseTopScore(PlayerController.Instance.playerScore, currentTopScore);
         ShowTopScore(currentTopScore);
+        PlayerController.Instance.playerScore = 0;
     }
 
     void ShowTopScore(int topScore = 0)
     {
         scoreText.text = "Top score: " + topScore;
-        PlayerController.Instance.playerScore = 0;
     }
 
     void IncreaseTopScore(int newTopScore, int oldTopScore)

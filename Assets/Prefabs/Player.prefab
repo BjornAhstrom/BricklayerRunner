@@ -143,12 +143,15 @@ MonoBehaviour:
   enemyMask:
     serializedVersion: 2
     m_Bits: 512
+  playerScore: 1740
+  lifeController: {fileID: 0}
   playerDistanceToGround: 1.2
   playerHealthBarStatusSpeed: 0.005
   playerHitDistanceLeftAndRightSideOn: 1.2
   greenStatusBarHeight: -0.3
-  playerScore: 1740
   healthBarStatus: 1.47
+  gameOver: 0
+  startLives: 3
 --- !u!58 &2405322084688377938
 CircleCollider2D:
   m_ObjectHideFlags: 0

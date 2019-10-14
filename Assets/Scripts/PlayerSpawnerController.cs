@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PlayerSpawnerController : MonoBehaviour
 {
-    [SerializeField] GameObject playerPrefab;
     [SerializeField] Transform startPosition;
 
     private void Start()

@@ -5,10 +5,6 @@ using TMPro;
 
 public class CameraFollow : MonoBehaviour
 {
-    //[SerializeField] PlayerController player;
-
-    GameObject player;
-   
     [Range(0, 1)] public float smoothDampTime = 0.15f;
     [Range(0, 10)] public float cameraOrthographicSize = 2.1f;
     [Range(-10, 10)] public float cameraMinPlayerYBottomCameraPosition = 0.05f;
@@ -48,7 +44,6 @@ public class CameraFollow : MonoBehaviour
     private void Update()
     {
         CameraFollowSmooth();
-
     }
 
     void CameraFollowSmooth()
@@ -66,6 +61,4 @@ public class CameraFollow : MonoBehaviour
             transform.position = new Vector3(x, y, transform.position.z);
         }
     }
-
-    
 }

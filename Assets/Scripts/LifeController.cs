@@ -1,20 +1,38 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LifeController : MonoBehaviour
 {
     public float distance = 0.8f;
 
     private List<GameObject> lives = new List<GameObject>();
-    //private Vector2 cameraPositon;
+
+
+    private void Start()
+    {
+        InitializeLife(PlayerController.Instance.startLives);
+    }
 
     private void Update()
     {
-        //UpdateLifeControllerPosition();
+        UpdateRemovedLives();
     }
 
-    public void InitializeLife(int LifeCount)
+    void UpdateRemovedLives()
+    {
+        if (PlayerController.Instance.playerDied)
+        {
+            RemoveLives();
+            PlayerController.Instance.playerDied = false;
+            InitializeLife(PlayerController.Instance.startLives);
+            SceneManager.LoadScene("Level1");
+
+        }
+    }
+
+    public void InitializeLife(int lifeCount)
     {
         // Letar reda på första livet
         GameObject firstLife = transform.GetChild(0).gameObject;
@@ -28,9 +46,9 @@ public class LifeController : MonoBehaviour
         }
 
         // Kopiera firstLife
-        for (int i = 0; i < LifeCount -1; i++ )
+        for (int i = 0; i < lifeCount -1; i++ )
         {
-            GameObject life = Instantiate(firstLife); // Instantiera första livet
+            GameObject life = Instantiate(firstLife);
             lives.Add(life);
             life.transform.parent = transform;
             Vector3 pos = life.transform.position;

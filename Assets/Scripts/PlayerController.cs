@@ -9,7 +9,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] LayerMask groundMask;
     [SerializeField] LayerMask enemyMask;
     [HideInInspector] public int playerScore = 0;
-    public LifeController lifeController;
 
     [Range(0, 10)] public float playerDistanceToGround = 1.2f;
     [Range(0, 0.01f)] public float playerHealthBarStatusSpeed = 0.005f;
@@ -19,6 +18,7 @@ public class PlayerController : MonoBehaviour
     public float healthBarStatus = 1f;
     public bool gameOver = false;
     public int startLives = 3;
+    public bool playerDied = false;
 
     private static PlayerController _instance;
 
@@ -48,12 +48,6 @@ public class PlayerController : MonoBehaviour
             _instance = this;
             DontDestroyOnLoad(gameObject);
         }
-    }
-
-    private void Start()
-    {
-        lifeController = GameObject.FindGameObjectWithTag("Life").GetComponent<LifeController>();
-        lifeController.InitializeLife(startLives);
     }
 
     void Update()
@@ -97,22 +91,20 @@ public class PlayerController : MonoBehaviour
     {
         if (healthBarStatus < 0.001f)
         {
-            Debug.Log("Loos life");
-            lifeController.RemoveLives();
-            healthBarStatus = 1.0f;
             startLives--;
-
-            if (startLives <= 0)
-            {
-
-                Debug.Log("Dead");
-                //gameObject.SetActive(false);
-                //gameOver = true;
-                //healthBarStatus = 1.0f;
-
-                //SceneManager.LoadScene("MainMenu");
-            }
+            playerDied = true;
+            healthBarStatus = 1.0f;
             
+            if (startLives < 0)
+            {
+                Debug.Log("Dead");
+                gameObject.SetActive(false);
+                healthBarStatus = 1.0f;
+                startLives = 3;
+                gameOver = true;
+
+                SceneManager.LoadScene("MainMenu");
+            }
         }
     }
 

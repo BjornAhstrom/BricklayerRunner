@@ -485,8 +485,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 5.246, y: 0.88}
-  m_SizeDelta: {x: 2.86, y: 0.943}
+  m_AnchoredPosition: {x: 4.94, y: 0.866}
+  m_SizeDelta: {x: 2.421, y: 0.875}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &860142914
 GameObject:
@@ -513,7 +513,7 @@ Transform:
   m_GameObject: {fileID: 860142914}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -6, y: 0, z: 0}
-  m_LocalScale: {x: 0, y: 1, z: 1}
+  m_LocalScale: {x: 0, y: 20, z: 1}
   m_Children:
   - {fileID: 2000502326}
   m_Father: {fileID: 2034520559}
@@ -770,8 +770,8 @@ GameObject:
   - component: {fileID: 2034520559}
   - component: {fileID: 2034520558}
   m_Layer: 0
-  m_Name: HealtBarPlayer
-  m_TagString: HealtBarPlayer
+  m_Name: ProgressBar
+  m_TagString: ProgressBar
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

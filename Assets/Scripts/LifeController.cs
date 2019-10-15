@@ -26,9 +26,8 @@ public class LifeController : MonoBehaviour
         {
             RemoveLives();
             PlayerController.Instance.playerDied = false;
-            InitializeLife(PlayerController.Instance.startLives);
+            //InitializeLife(PlayerController.Instance.startLives);
             SceneManager.LoadScene("Level1");
-
         }
     }
 
@@ -38,7 +37,7 @@ public class LifeController : MonoBehaviour
         GameObject firstLife = transform.GetChild(0).gameObject;
         lives.Add(firstLife);
 
-        // Om det inte finns något object då ska det skrivas ut ett error meddelande
+        // If there is no object, print out a error message
         if (firstLife == null)
         {
             Debug.LogError("No Lives");

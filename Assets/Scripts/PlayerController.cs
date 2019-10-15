@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] LayerMask groundMask;
     [SerializeField] LayerMask enemyMask;
     [HideInInspector] public int playerScore = 0;
+    
 
     [Range(0, 10)] public float playerDistanceToGround = 1.2f;
     [Range(0, 0.01f)] public float playerHealthBarStatusSpeed = 0.005f;
@@ -19,6 +20,7 @@ public class PlayerController : MonoBehaviour
     public bool gameOver = false;
     public int startLives = 3;
     public bool playerDied = false;
+    public string levelToLoad = "Level1";
 
     private static PlayerController _instance;
 
@@ -95,7 +97,7 @@ public class PlayerController : MonoBehaviour
             playerDied = true;
             healthBarStatus = 1.0f;
             
-            if (startLives < 0)
+            if (startLives <= 0)
             {
                 Debug.Log("Dead");
                 gameObject.SetActive(false);

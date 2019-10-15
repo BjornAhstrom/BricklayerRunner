@@ -18,6 +18,7 @@ TagManager:
   - Grass
   - OverWater
   - Life
+  - ProgressBar
   layers:
   - Default
   - TransparentFX

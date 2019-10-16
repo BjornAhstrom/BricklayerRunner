@@ -5,22 +5,24 @@ using UnityEngine;
 public class EnemyController : MonoBehaviour
 {
     [SerializeField] LayerMask layerMask;
+    [SerializeField] GameObject bar;
 
     [HideInInspector] public Transform positions;
 
-    SpriteRenderer spriteRenderer;
-    SpriteRenderer sprite;
-    public GameObject bar;
-    [SerializeField] public int playerScore = 0;
-    
-    float enemyHeight;
-    float deathDelay = 0.2f;
-
     [Range(100, 1000)] public float speed = 400f;
     [Range(0, 0.1f)] public float enemyHealthBarStatusSpeed = 0.01f;
-    public float greenStatusBarHeight = 1f;
+    [Range(0, 5)] public float boxColliderWidth = 0.5f;
+    [Range(0, 5)] public float boxColliderHeight = 0.3f;
+    //[Range(-5, 5)] public float boxColliderMoveLeftOrRight = 0f;
+    //[Range(-5, 5)] public float boxColliderMoveUpOrDown = 0f;
+    [Range(0, 5)] public float boxColliderHitDistance = 1f;
+    [Range(0, 5)] public float greenStatusBarHeight = 1f;
 
+    private SpriteRenderer spriteRenderer;
+    private SpriteRenderer sprite;
     private float healthBarStatus = 1.01f;
+    private float enemyHeight;
+    private float deathDelay = 0.2f;
     private bool hit = true;
 
     private void Start()
@@ -48,11 +50,6 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawWireCube(transform.position + Vector3.up * 1f, new Vector3(0.5f, 0.3f, 0));
-    }
-
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.transform.CompareTag("Player"))
@@ -70,11 +67,18 @@ public class EnemyController : MonoBehaviour
         }
     }
 
+    private void OnDrawGizmos()
+    {
+        Vector2 origin = new Vector2(transform.position.x, transform.position.y);//boxColliderMoveLeftOrRight, boxColliderMoveUpOrDown);
+
+        Gizmos.DrawWireCube(origin, new Vector3(boxColliderWidth, boxColliderHeight, 0));
+    }
+
     void CheckIfPlayerJumpOnHead()
     {
-        Vector2 origin = new Vector2(transform.position.x, transform.position.y);
+        Vector2 origin = new Vector2(transform.position.x, transform.position.y);//boxColliderMoveLeftOrRight, boxColliderMoveUpOrDown);
 
-        RaycastHit2D checkPlayerOnHead = Physics2D.BoxCast(origin, new Vector2(0.5f, 0.3f), 0, Vector2.up, 1f, layerMask);
+        RaycastHit2D checkPlayerOnHead = Physics2D.BoxCast(origin, new Vector2(boxColliderWidth, boxColliderHeight), 0, Vector2.up, boxColliderHitDistance, layerMask);
 
         if (checkPlayerOnHead.collider != null && hit != false)
         {

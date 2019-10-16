@@ -13,6 +13,7 @@ public class LoadSceneContoller : MonoBehaviour
     private float barStatus = 0.001f;
     private float progressMultipliedBy = 100f;
     private float progressDividedBy = 0.9f;
+    private YieldInstruction endOfFrame = new WaitForEndOfFrame();
 
     private void Start()
     {
@@ -29,7 +30,7 @@ public class LoadSceneContoller : MonoBehaviour
 
             LoadSceneStatusBar(progress);
 
-            yield return new WaitForEndOfFrame();
+            yield return endOfFrame;
         }
     }
 

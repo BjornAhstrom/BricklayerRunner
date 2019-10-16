@@ -8,9 +8,10 @@ public class MenuController : MonoBehaviour
 {
     [SerializeField] TextMeshPro scoreText;
 
-    string levelToLoad;
+    //string levelToLoad;
     private int currentTopScore = 0;
     private float loadDealy = 1f;
+    private YieldInstruction delay = new WaitForSeconds(1);
 
     // Start is called before the first frame update
     void Start()
@@ -48,7 +49,7 @@ public class MenuController : MonoBehaviour
         AsyncOperation async = SceneManager.LoadSceneAsync(levelName);
         async.allowSceneActivation = false;
 
-        yield return new WaitForSeconds(loadDealy);
+        yield return delay;//new WaitForSeconds(loadDealy);
 
         async.allowSceneActivation = true;
 

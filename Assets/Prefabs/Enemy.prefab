@@ -304,7 +304,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5588865667740547619}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -1}
+  m_LocalPosition: {x: -0.014, y: 0, z: -1}
   m_LocalScale: {x: 0.077, y: 0.077, z: 1}
   m_Children:
   - {fileID: 4617081892504879199}
@@ -397,12 +397,12 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   positions: {fileID: 0}
-  playerController: {fileID: 5109250656746219877, guid: e53b69b4913f3446499fab221e001786,
-    type: 3}
   bar: {fileID: 7067187992757358563}
-  playerScore: 0
   speed: 110
   enemyHealthBarStatusSpeed: 0.019
+  boxColliderWidth: 0.68
+  boxColliderHeight: 0.27
+  boxColliderHitDistance: 1
   greenStatusBarHeight: 1
 --- !u!95 &7558564468215562712
 Animator:
@@ -430,7 +430,7 @@ PolygonCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5588865667740547619}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
@@ -721,8 +721,8 @@ PolygonCollider2D:
       - {x: -9.936533, y: 4.97416}
       - {x: -9.818662, y: 4.8798633}
       - {x: -9.712578, y: 4.7973533}
-      - {x: -9.523984, y: 4.8091407}
-      - {x: -9.465049, y: 4.89165}
+      - {x: -10.530397, y: 5.750624}
+      - {x: -2.859414, y: -9.874662}
       - {x: -9.476835, y: 5.0213084}
       - {x: -9.488623, y: 5.0566697}
       - {x: -9.58292, y: 5.2334766}
@@ -739,19 +739,19 @@ PolygonCollider2D:
       - {x: -8.474932, y: 5.374922}
       - {x: -8.392422, y: 5.3395605}
       - {x: -8.250977, y: 5.315986}
-      - {x: -8.038809, y: 5.315986}
+      - {x: -6.3181667, y: 5.9977508}
       - {x: -7.897363, y: 5.374922}
       - {x: -7.814853, y: 5.4810057}
       - {x: -7.814853, y: 5.5753026}
       - {x: -7.873789, y: 5.6695995}
       - {x: -7.99166, y: 5.7756834}
-      - {x: -7.885576, y: 5.7638965}
+      - {x: -5.905214, y: 8.685742}
       - {x: -7.5555367, y: 5.752109}
       - {x: -7.3669434, y: 5.752109}
-      - {x: -7.0840526, y: 5.7992578}
+      - {x: -4.854121, y: 7.78142}
       - {x: -6.812949, y: 5.8935547}
-      - {x: -6.5654197, y: 6.035}
-      - {x: -6.4357615, y: 6.0939355}
+      - {x: -5.4012246, y: 6.21882}
+      - {x: -5.80657, y: 6.3036647}
       - {x: -6.058574, y: 6.0939355}
       - {x: -5.9053416, y: 6.152871}
       - {x: -5.728535, y: 6.2471676}
@@ -877,7 +877,7 @@ PolygonCollider2D:
       - {x: -2.4399316, y: -4.101914}
       - {x: -2.5460155, y: -4.2551465}
       - {x: -2.6049511, y: -4.3848047}
-      - {x: -2.6167383, y: -4.856289}
+      - {x: -5.152417, y: 0.41792184}
       - {x: -2.5578027, y: -5.174541}
       - {x: -2.48708, y: -5.3513474}
       - {x: -2.3692088, y: -5.50458}
@@ -933,7 +933,7 @@ PolygonCollider2D:
       - {x: -3.0764356, y: -8.628164}
       - {x: -3.3357518, y: -8.628164}
       - {x: -3.4064746, y: -8.663526}
-      - {x: -3.4418359, y: -8.769609}
+      - {x: -2.697273, y: -4.8482523}
       - {x: -3.3593261, y: -8.8521185}
       - {x: -0.6301519, y: -11.083011}
       - {x: -3.0528612, y: -9.111435}
@@ -1158,9 +1158,9 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 3.4994347, y: -10.104003}
+  m_Offset: {x: 1.402406, y: -5.106446}
   serializedVersion: 2
-  m_Radius: 2.2124345
+  m_Radius: 7.2619143
 --- !u!61 &7558564469239717074
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1168,13 +1168,13 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5588865667740547619}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -1.9309555, y: 10.339474}
+  m_Offset: {x: 1.3643842, y: 1.1508558}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -1185,7 +1185,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 9.536714, y: 1.1633987}
+  m_Size: {x: 12.382701, y: 15.849533}
   m_EdgeRadius: 0
 --- !u!1 &7067187992757358563
 GameObject:

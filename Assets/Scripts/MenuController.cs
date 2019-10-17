@@ -41,7 +41,7 @@ public class MenuController : MonoBehaviour
 
     public void ChangeScene()
     {
-        StartCoroutine(LoadLevelAndChange("LoadScene"));
+        SceneHandler.Instance.ChangeLevelTo("Level1");
     }
 
     IEnumerator LoadLevelAndChange(string levelName)

@@ -43,3 +43,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b51b854f16f6743429278a4a6709751e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  levelToLoad: 
+  progress: 20

@@ -19,6 +19,9 @@ TagManager:
   - OverWater
   - Life
   - ProgressBar
+  - Boss1
+  - Button
+  - IncreaseLife
   layers:
   - Default
   - TransparentFX

@@ -20,7 +20,6 @@ public class PlayerController : MonoBehaviour
     public bool gameOver = false;
     public int startLives = 3;
     public bool playerDied = false;
-    public string levelToLoad = "Level1";
 
     private static PlayerController _instance;
 
@@ -86,6 +85,7 @@ public class PlayerController : MonoBehaviour
         if (leftSide.collider != null || rightSide.collider != null)
         {
             healthBarStatus -= playerHealthBarStatusSpeed;
+            MakePlayerSmaller();
         }
     }
 
@@ -108,6 +108,23 @@ public class PlayerController : MonoBehaviour
                 SceneManager.LoadScene("MainMenu");
             }
         }
+    }
+
+    public void MakePlayerBigger()
+    {
+        transform.localScale = new Vector2(0.4f, 0.4f);
+        playerDistanceToGround = 1.4f;
+
+        // sänka eller behålla hastigheten på hälsobaren 
+
+    }
+
+    public void MakePlayerSmaller()
+    {
+        transform.localScale = new Vector2(0.3f, 0.3f);
+        playerDistanceToGround = 1.2f;
+
+        // Öka hastigheten på hälsobaren
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

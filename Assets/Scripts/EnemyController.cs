@@ -9,18 +9,21 @@ public class EnemyController : MonoBehaviour
 
     [HideInInspector] public Transform positions;
 
-    [Range(100, 1000)] public float speed = 400f;
+    //[Range(100, 1000)] public float speed = 400f;
     [Range(0, 0.1f)] public float enemyHealthBarStatusSpeed = 0.01f;
     [Range(0, 5)] public float boxColliderWidth = 0.5f;
     [Range(0, 5)] public float boxColliderHeight = 0.3f;
     //[Range(-5, 5)] public float boxColliderMoveLeftOrRight = 0f;
     //[Range(-5, 5)] public float boxColliderMoveUpOrDown = 0f;
-    [Range(0, 5)] public float boxColliderHitDistance = 1f;
+    [Range(0, 10)] public float boxColliderHitDistance = 1f;
     [Range(0, 5)] public float greenStatusBarHeight = 1f;
+    public int nrOfHits = 5;
+    public bool enemyIsAlive = false;
+
 
     private SpriteRenderer spriteRenderer;
     private SpriteRenderer sprite;
-    private float healthBarStatus = 1.01f;
+    private float healthBarStatus = 1f;
     private float enemyHeight;
     private float deathDelay = 0.2f;
     private bool hit = true;
@@ -29,6 +32,7 @@ public class EnemyController : MonoBehaviour
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         sprite = GetComponent<SpriteRenderer>();
+        enemyIsAlive = true;
     }
 
     private void Update()
@@ -52,15 +56,15 @@ public class EnemyController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.transform.CompareTag("Player"))
+        if (collision.transform.CompareTag("Player") && enemyIsAlive == true)
         {
             CheckIfPlayerJumpOnHead();
         }
 
-        if (collision.transform.CompareTag("Brick") && hit)
+        if (collision.transform.CompareTag("Brick") && hit && enemyIsAlive == true)
         {
             PlayerController.Instance.playerScore += 10;
-            healthBarStatus -= 0.34f;
+            healthBarStatus -= (1f / (float) nrOfHits);
             UpdateHealthBarStatus();
             
             hit = false;
@@ -83,7 +87,7 @@ public class EnemyController : MonoBehaviour
         if (checkPlayerOnHead.collider != null && hit != false)
         {
             PlayerController.Instance.playerScore += 10;
-            healthBarStatus -= 0.34f;
+            healthBarStatus -= (1f / (float)nrOfHits);
             UpdateHealthBarStatus();
         }
     }
@@ -142,5 +146,10 @@ IEnumerator SetHitTo(bool trueOrFalse)
         sprite.color = color;
 
         gameObject.SetActive(false);
+
+        if (gameObject.CompareTag("Boss1"))
+        {
+            SceneHandler.Instance.ChangeLevelTo("Level2");
+        }
     }
 }

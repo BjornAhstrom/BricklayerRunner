@@ -396,14 +396,15 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 256
-  positions: {fileID: 0}
   bar: {fileID: 7067187992757358563}
+  positions: {fileID: 0}
   speed: 110
   enemyHealthBarStatusSpeed: 0.019
   boxColliderWidth: 0.68
   boxColliderHeight: 0.27
   boxColliderHitDistance: 1
   greenStatusBarHeight: 1
+  nrOfHits: 3
 --- !u!95 &7558564468215562712
 Animator:
   serializedVersion: 3

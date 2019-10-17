@@ -8,7 +8,7 @@ public class ChaseBeahviour : StateMachineBehaviour
     EnemyController enemy;
     Rigidbody2D rb;
 
-    public float enemyFollowSpeed = 400f;
+    public float followSpeed = 350f;
     int distansToPlayerHash = Animator.StringToHash("DistanceToPlayer");
 
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
@@ -21,7 +21,6 @@ public class ChaseBeahviour : StateMachineBehaviour
         {
             playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         }
-
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
@@ -32,9 +31,7 @@ public class ChaseBeahviour : StateMachineBehaviour
 
         Vector2 direction = new Vector2((target - current).normalized.x, 0);
 
-        rb.velocity = new Vector2(direction.x * enemyFollowSpeed * Time.deltaTime, rb.velocity.y);
-
-        
+        rb.velocity = new Vector2(direction.x * followSpeed * Time.deltaTime, rb.velocity.y);
 
         //animator.transform.position = Vector2.MoveTowards(current, target, enemyFollowSpeed * Time.deltaTime);
 

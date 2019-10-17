@@ -62,7 +62,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed57fc83ea83b4c5695d2b77a71b9593, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyFollowSpeed: 250
+  followSpeed: 250
 --- !u!1101 &-1568967737924255698
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -100,7 +100,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb3301ffe86b44f25967f4520453b8fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  patrolSpeed: 100
+  patrolSpeed: 150
 --- !u!91 &9100000
 AnimatorController:
   m_ObjectHideFlags: 0

@@ -13,6 +13,8 @@ public class PatrolBehaviour : StateMachineBehaviour
 
     int randomPointsIndex;
     int playerDistanceHash = Animator.StringToHash("DistanceToPlayer");
+    int runHash = Animator.StringToHash("Run");
+    float timeStillWalking;
     Rigidbody2D rb;
 
 
@@ -34,6 +36,8 @@ public class PatrolBehaviour : StateMachineBehaviour
         }
 
         rb.velocity = Vector3.zero;
+
+        timeStillWalking = Random.Range(3f, 6f);
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
@@ -55,6 +59,13 @@ public class PatrolBehaviour : StateMachineBehaviour
         else
         {
             randomPointsIndex = Random.Range(0, enemy.positions.childCount);
+        }
+
+        timeStillWalking -= Time.deltaTime;
+
+        if (timeStillWalking <= 0)
+        {
+            animator.SetBool(runHash, true);
         }
     }
 

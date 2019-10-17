@@ -4,33 +4,33 @@ using UnityEngine;
 
 public class BrickController : MonoBehaviour
 {
-    [SerializeField] LayerMask layerMask;
-
-    [Range(0, 5)] public float raycastLengthRightAndLeftSide = 0.5f;
-    [Range(0, 5)] public float raycastLengtBottomAndTop = 0.1f;
-
     private float destroyDelayWhenEnemyHit = 0.01f;
-    private float destroyDelay = 2f;
+    private float destroyDelay = 0.01f;
 
-    private void Update()
-    {
-        //CheckIfHit();
-        StartCoroutine(MakeBrickDisappear());
-    }
+    //[SerializeField] LayerMask layerMask;
 
-    void CheckIfHit()
-    {
-        Vector2 originBrick = new Vector2(transform.position.x, transform.position.y);
-        RaycastHit2D leftSideBrick = Physics2D.Raycast(originBrick, Vector2.left, raycastLengthRightAndLeftSide, layerMask);
-        RaycastHit2D rightSideBrick = Physics2D.Raycast(originBrick, Vector2.right, raycastLengthRightAndLeftSide, layerMask);
-        RaycastHit2D upSideBrick = Physics2D.Raycast(originBrick, Vector2.up, raycastLengtBottomAndTop, layerMask);
-        RaycastHit2D bottomSideBrick = Physics2D.Raycast(originBrick, Vector2.down, raycastLengtBottomAndTop, layerMask);
+    //[Range(0, 5)] public float raycastLengthRightAndLeftSide = 0.5f;
+    //[Range(0, 5)] public float raycastLengtBottomAndTop = 0.1f;
 
-        if (leftSideBrick.collider != null || rightSideBrick.collider != null || upSideBrick.collider != null || bottomSideBrick.collider != null)
-        {
-            gameObject.SetActive(false);
-        }
-    }
+    //private void Update()
+    //{
+    //CheckIfHit();
+    // StartCoroutine(MakeBrickDisappear());
+    //}
+
+    //void CheckIfHit()
+    //{
+    //    Vector2 originBrick = new Vector2(transform.position.x, transform.position.y);
+    //    RaycastHit2D leftSideBrick = Physics2D.Raycast(originBrick, Vector2.left, raycastLengthRightAndLeftSide, layerMask);
+    //    RaycastHit2D rightSideBrick = Physics2D.Raycast(originBrick, Vector2.right, raycastLengthRightAndLeftSide, layerMask);
+    //    RaycastHit2D upSideBrick = Physics2D.Raycast(originBrick, Vector2.up, raycastLengtBottomAndTop, layerMask);
+    //    RaycastHit2D bottomSideBrick = Physics2D.Raycast(originBrick, Vector2.down, raycastLengtBottomAndTop, layerMask);
+
+    //    if (leftSideBrick.collider != null || rightSideBrick.collider != null || upSideBrick.collider != null || bottomSideBrick.collider != null)
+    //    {
+    //        gameObject.SetActive(false);
+    //    }
+    //}
 
     //private void OnEnable()
     //{
@@ -42,6 +42,10 @@ public class BrickController : MonoBehaviour
         if (collision.transform.CompareTag("Enemy"))
         {
             StartCoroutine(DealyHitWithEnemy());
+        }
+        else
+        {
+            StartCoroutine(MakeBrickDisappear());
         }
     }
 

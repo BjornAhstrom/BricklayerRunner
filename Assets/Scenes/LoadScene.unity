@@ -789,7 +789,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   statusBar: {fileID: 860142914}
-  greenStatusBarHeight: 20
   percentText: {fileID: 704914961}
 --- !u!4 &2034520559
 Transform:

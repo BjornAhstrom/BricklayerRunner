@@ -20,7 +20,6 @@ public class EnemyController : MonoBehaviour
     public int nrOfHits = 5;
     public bool enemyIsAlive = false;
 
-
     private SpriteRenderer spriteRenderer;
     private SpriteRenderer sprite;
     private float healthBarStatus = 1f;
@@ -82,10 +81,12 @@ public class EnemyController : MonoBehaviour
     {
         Vector2 origin = new Vector2(transform.position.x, transform.position.y);//boxColliderMoveLeftOrRight, boxColliderMoveUpOrDown);
 
-        RaycastHit2D checkPlayerOnHead = Physics2D.BoxCast(origin, new Vector2(boxColliderWidth, boxColliderHeight), 0, Vector2.up, boxColliderHitDistance, layerMask);
+        RaycastHit2D checkIfPlayerJumpOnHead = Physics2D.BoxCast(origin, new Vector2(boxColliderWidth, boxColliderHeight), 0, Vector2.up, boxColliderHitDistance, layerMask);
 
-        if (checkPlayerOnHead.collider != null && hit != false)
+        if (checkIfPlayerJumpOnHead.collider != null && hit != false)
         {
+            
+
             PlayerController.Instance.playerScore += 10;
             healthBarStatus -= (1f / (float)nrOfHits);
             UpdateHealthBarStatus();

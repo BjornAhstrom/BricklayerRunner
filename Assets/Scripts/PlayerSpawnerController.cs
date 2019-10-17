@@ -16,6 +16,7 @@ public class PlayerSpawnerController : MonoBehaviour
         PlayerController.Instance.gameObject.SetActive(false);
 
         PlayerController.Instance.transform.position = startPosition.position;
+        PlayerController.Instance.MakePlayerSmaller();
 
         yield return new WaitForSeconds(0.2f);
 

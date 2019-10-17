@@ -14,12 +14,17 @@ public class PlayerController : MonoBehaviour
     [Range(0, 10)] public float playerDistanceToGround = 1.2f;
     [Range(0, 0.01f)] public float playerHealthBarStatusSpeed = 0.005f;
     [Range(0, 5)] public float playerHitDistanceLeftAndRightSideOn = 1.2f;
+    [Range(0, 5)] public float makeplayerBigger = 1.4f;
 
+    public float playerOriginalSize = 0.3f;
     public float greenStatusBarHeight = 1f;
     public float healthBarStatus = 1f;
     public bool gameOver = false;
     public int startLives = 3;
     public bool playerDied = false;
+
+    private float bigPlayerHealtBarStatusSpeed = 0;
+    private float smallPlayerHealtBarStatusSpeed = 0.005f;
 
     private static PlayerController _instance;
 
@@ -112,19 +117,16 @@ public class PlayerController : MonoBehaviour
 
     public void MakePlayerBigger()
     {
-        transform.localScale = new Vector2(0.4f, 0.4f);
-        playerDistanceToGround = 1.4f;
-
-        // sänka eller behålla hastigheten på hälsobaren 
-
+        playerHealthBarStatusSpeed = bigPlayerHealtBarStatusSpeed;
+        transform.localScale = new Vector2(playerOriginalSize * makeplayerBigger, playerOriginalSize * makeplayerBigger);
+        playerDistanceToGround *= makeplayerBigger;
     }
 
     public void MakePlayerSmaller()
     {
-        transform.localScale = new Vector2(0.3f, 0.3f);
+        playerHealthBarStatusSpeed = smallPlayerHealtBarStatusSpeed;
+        transform.localScale = new Vector2(playerOriginalSize, playerOriginalSize);
         playerDistanceToGround = 1.2f;
-
-        // Öka hastigheten på hälsobaren
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

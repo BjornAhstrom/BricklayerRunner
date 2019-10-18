@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class PatrolBehaviour : StateMachineBehaviour
 {
-    //public GameObject enemeyPatrolPointsPrefab;
-    //Transform enemyPatrolPoints;
     Transform playerTransform;
     EnemyController enemy;
 
@@ -13,11 +11,9 @@ public class PatrolBehaviour : StateMachineBehaviour
 
     int randomPointsIndex;
     int playerDistanceHash = Animator.StringToHash("DistanceToPlayer");
-    int runHash = Animator.StringToHash("Run");
+    int stopHash = Animator.StringToHash("Stop");
     float timeStillWalking;
     Rigidbody2D rb;
-
-
 
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -65,7 +61,7 @@ public class PatrolBehaviour : StateMachineBehaviour
 
         if (timeStillWalking <= 0)
         {
-            animator.SetBool(runHash, true);
+            animator.SetBool(stopHash, true);
         }
     }
 

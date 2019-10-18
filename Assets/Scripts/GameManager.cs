@@ -30,11 +30,6 @@ public class GameManager : MonoBehaviour
     {
         scoreText.text = "Score" + "\n" + PlayerController.Instance.playerScore;
         UpdateHealtbarStatus();
-
-        if (PlayerController.Instance.gameOver)
-        {
-            GameOverText();
-        }
     }
 
     void UpdateHealtbarStatus()
@@ -42,9 +37,8 @@ public class GameManager : MonoBehaviour
         bar.transform.localScale = new Vector2(PlayerController.Instance.healthBarStatus, greenStatusBarHeight);
     }
 
-    void GameOverText()
+    public void GameOverText()
     {
-
         gameOverController.gameObject.SetActive(true);
         gameOverText.text = "Game over";
     }

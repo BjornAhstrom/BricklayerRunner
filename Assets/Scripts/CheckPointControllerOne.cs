@@ -2,13 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BiggerPlayerController : MonoBehaviour
+public class CheckPointControllerOne : MonoBehaviour
 {
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
         {
-            PlayerController.Instance.MakePlayerBigger();
+            PlayerController.Instance.runTroughCheckPoint1 = true;
+            PlayerController.Instance.runTroughCheckPoint2 = false;
             gameObject.SetActive(false);
         }
     }

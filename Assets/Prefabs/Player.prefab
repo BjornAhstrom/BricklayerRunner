@@ -147,12 +147,12 @@ MonoBehaviour:
   playerDistanceToGround: 1.2
   playerHealthBarStatusSpeed: 0.005
   playerHitDistanceLeftAndRightSideOn: 1.2
+  makeplayerBigger: 1.4
+  playerOriginalSize: 0.3
   greenStatusBarHeight: -0.3
   healthBarStatus: 1.47
-  gameOver: 0
   startLives: 3
   playerDied: 0
-  levelToLoad: Level1
 --- !u!58 &2405322084688377938
 CircleCollider2D:
   m_ObjectHideFlags: 0

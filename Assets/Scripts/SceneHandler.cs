@@ -69,7 +69,7 @@ public class SceneHandler : MonoBehaviour
     public void ChangeLevelTo(string levelName)
     {
         levelToLoad = levelName;
-
+        PlayerController.Instance.currentLevel = levelName;
         SceneManager.LoadScene("LoadScene");
     }
 }

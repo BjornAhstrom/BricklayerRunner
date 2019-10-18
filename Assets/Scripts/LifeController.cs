@@ -27,7 +27,7 @@ public class LifeController : MonoBehaviour
             RemoveLives();
             PlayerController.Instance.playerDied = false;
             //InitializeLife(PlayerController.Instance.startLives);
-            SceneManager.LoadScene("Level1");
+            //SceneManager.LoadScene("Level1");
         }
     }
 

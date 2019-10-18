@@ -23,18 +23,10 @@ public class PlayerMovment : MonoBehaviour
 
     public bool grounded = false;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        //Fall();
-    }
-
     // Update is called once per frame
     void Update()
     {
         checkPlayerInput();
-
-        
     }
 
     private void FixedUpdate()
@@ -158,14 +150,5 @@ public class PlayerMovment : MonoBehaviour
         }
 
         return pos;
-    }
-
-    void Fall()
-    {
-        velocity.y = 0;
-
-        playerState = PlayerState.jumping;
-
-        grounded = false;
     }
 }

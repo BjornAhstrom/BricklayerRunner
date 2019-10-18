@@ -16,7 +16,7 @@ public class SpawnBehaviour : StateMachineBehaviour
         enemy = animator.gameObject.GetComponent<EnemyController>();
         rb = enemy.GetComponent<Rigidbody2D>();
 
-        enemy.enemyIsAlive = false;
+        //enemy.enemyIsAlive = false;
         //rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
         rb.constraints = RigidbodyConstraints2D.FreezeAll;
         
@@ -31,7 +31,7 @@ public class SpawnBehaviour : StateMachineBehaviour
 
         if (timeToStandStill <= 0)
         {
-            enemy.enemyIsAlive = true;
+            //enemy.enemyIsAlive = true;
 
             rb.constraints = RigidbodyConstraints2D.None;
             rb.freezeRotation = true;

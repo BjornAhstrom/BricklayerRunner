@@ -2,16 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RunBehavipur : StateMachineBehaviour
+public class StopBehaviour : StateMachineBehaviour
 {
-    Transform playerTransform;
     EnemyController enemy;
     Rigidbody2D rb;
 
-    public float enemyRunSpeed = 500f;
-    float timeToRun;
+    int stopHash = Animator.StringToHash("Stop");
     int runHash = Animator.StringToHash("Run");
-    int distansToPlayerHash = Animator.StringToHash("DistanceToPlayer");
+
+    float timeToStop;
 
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -19,43 +18,26 @@ public class RunBehavipur : StateMachineBehaviour
         enemy = animator.gameObject.GetComponent<EnemyController>();
         rb = enemy.GetComponent<Rigidbody2D>();
 
-        if (playerTransform == null)
-        {
-            playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
-        }
-
-        timeToRun = Random.Range(1f, 2f);
+        timeToStop = Random.Range(1f, 3f);
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        timeToRun -= Time.deltaTime;
+        timeToStop -= Time.deltaTime;
 
-        if (timeToRun <= 0)
-        {
-            animator.SetBool(runHash, false);
-        }
-
-        Vector2 current = animator.transform.position;
-        Vector2 target = playerTransform.position;
-
-        Vector2 direction = new Vector2((target - current).normalized.x, 0);
-
-        rb.velocity = new Vector2(direction.x * enemyRunSpeed * Time.deltaTime, rb.velocity.y);
-
-        animator.SetFloat(distansToPlayerHash, Vector2.Distance(current, target));
-
-        if (enemy.jumpOnHead == true)
+        if (timeToStop <= 0)
         {
             animator.SetBool(runHash, true);
         }
+
+        rb.velocity = new Vector2(0, 0);
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        animator.SetBool(runHash, false);
+        animator.SetBool(stopHash, false);
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

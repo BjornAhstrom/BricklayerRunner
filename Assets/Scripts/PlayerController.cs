@@ -6,6 +6,9 @@ using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
+    GameObject gameManager;
+    GameManager game;
+
     [SerializeField] LayerMask groundMask;
     [SerializeField] LayerMask enemyMask;
     [HideInInspector] public int playerScore = 0;
@@ -22,6 +25,9 @@ public class PlayerController : MonoBehaviour
     public bool gameOver = false;
     public int startLives = 3;
     public bool playerDied = false;
+    public string currentLevel = "Level1";
+    public bool runTroughCheckPoint1 = false;
+    public bool runTroughCheckPoint2 = false;
 
     private float bigPlayerHealtBarStatusSpeed = 0;
     private float smallPlayerHealtBarStatusSpeed = 0.005f;
@@ -54,6 +60,13 @@ public class PlayerController : MonoBehaviour
             _instance = this;
             DontDestroyOnLoad(gameObject);
         }
+
+        //if (gameManager == null)
+        //{
+        //    gameManager = GameObject.FindGameObjectWithTag("GameManager");
+        //}
+
+        //game = gameManager.GetComponent<GameManager>();
     }
 
     void Update()
@@ -101,18 +114,30 @@ public class PlayerController : MonoBehaviour
             startLives--;
             playerDied = true;
             healthBarStatus = 1.0f;
+
+            SceneManager.LoadScene(currentLevel);
             
             if (startLives <= 0)
             {
-                Debug.Log("Dead");
+                healthBarStatus = 0;
+                //gameOver = true;
+                SaveScoreToDevice();
+                SceneHandler.Instance.ChangeLevelTo("MainMenu");
                 gameObject.SetActive(false);
                 healthBarStatus = 1.0f;
                 startLives = 3;
-                gameOver = true;
 
-                SceneManager.LoadScene("MainMenu");
+                //StartCoroutine(TriggGameOverSign());
             }
         }
+    }
+
+    IEnumerator TriggGameOverSign()
+    {
+        //game.GameOverText();
+
+        yield return new WaitForSeconds(2);
+        
     }
 
     public void MakePlayerBigger()
@@ -133,7 +158,7 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.CompareTag("Water"))
         {
-            //Debug.Log("Hit the " + collision.name);
+            Debug.Log("Hit the " + collision.name);
             //moveSpeed = 150f;
             //jumpForce = 2.5f;
         }
@@ -148,4 +173,28 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Water"))
+        {
+            Debug.Log("Not hiting the " + collision.name);
+        }
+    }
+
+    void SaveScoreToDevice()
+    {
+        PlayerPrefs.SetInt("NewScore", playerScore);
+        if (!PlayerPrefs.HasKey("HighScore"))
+        {
+            PlayerPrefs.SetInt("HighScore", playerScore);
+        }
+        else
+        {
+            int highScore = PlayerPrefs.GetInt("HighScore");
+            if (highScore < playerScore)
+            {
+                PlayerPrefs.SetInt("HighScore", playerScore);
+            }
+        }
+    }
 }

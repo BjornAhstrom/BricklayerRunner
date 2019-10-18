@@ -18,20 +18,21 @@ public class EnemyController : MonoBehaviour
     [Range(0, 10)] public float boxColliderHitDistance = 1f;
     [Range(0, 5)] public float greenStatusBarHeight = 1f;
     public int nrOfHits = 5;
-    public bool enemyIsAlive = false;
+    //public bool enemyIsAlive = false;
+    public bool jumpOnHead = false;
 
     private SpriteRenderer spriteRenderer;
     private SpriteRenderer sprite;
     private float healthBarStatus = 1f;
     private float enemyHeight;
-    private float deathDelay = 0.2f;
+    private YieldInstruction deathDelay = new WaitForSeconds(0.2f);
     private bool hit = true;
 
     private void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         sprite = GetComponent<SpriteRenderer>();
-        enemyIsAlive = true;
+        //enemyIsAlive = true;
     }
 
     private void Update()
@@ -55,12 +56,12 @@ public class EnemyController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.transform.CompareTag("Player") && enemyIsAlive == true)
+        if (collision.transform.CompareTag("Player")) // && enemyIsAlive == true)
         {
             CheckIfPlayerJumpOnHead();
         }
 
-        if (collision.transform.CompareTag("Brick") && hit && enemyIsAlive == true)
+        if (collision.transform.CompareTag("Brick") && hit) // && enemyIsAlive == true)
         {
             PlayerController.Instance.playerScore += 10;
             healthBarStatus -= (1f / (float) nrOfHits);
@@ -77,7 +78,7 @@ public class EnemyController : MonoBehaviour
         Gizmos.DrawWireCube(origin, new Vector3(boxColliderWidth, boxColliderHeight, 0));
     }
 
-    void CheckIfPlayerJumpOnHead()
+    public void CheckIfPlayerJumpOnHead()
     {
         Vector2 origin = new Vector2(transform.position.x, transform.position.y);//boxColliderMoveLeftOrRight, boxColliderMoveUpOrDown);
 
@@ -85,11 +86,10 @@ public class EnemyController : MonoBehaviour
 
         if (checkIfPlayerJumpOnHead.collider != null && hit != false)
         {
-            
-
             PlayerController.Instance.playerScore += 10;
             healthBarStatus -= (1f / (float)nrOfHits);
             UpdateHealthBarStatus();
+            jumpOnHead = true;
         }
     }
 
@@ -103,7 +103,7 @@ public class EnemyController : MonoBehaviour
 
     void HealtBarStatus()
     {
-        if (healthBarStatus <= 0.01f)
+        if (healthBarStatus <= enemyHealthBarStatusSpeed)
         {
             StartCoroutine(InactivateEnemy());
             StartCoroutine(SetHitTo(true));
@@ -128,19 +128,19 @@ IEnumerator SetHitTo(bool trueOrFalse)
 
         Color healthBarColor = healtBar.color;
 
-        yield return new WaitForSeconds(deathDelay);
+        yield return deathDelay;
         healthBarColor.a = 0;
         healtBar.color = healthBarColor;
         color.a = 0;
         sprite.color = color;
 
-        yield return new WaitForSeconds(deathDelay);
+        yield return deathDelay;
         healthBarColor.a = 1;
         healtBar.color = healthBarColor;
         color.a = 1;
         sprite.color = color;
 
-        yield return new WaitForSeconds(deathDelay);
+        yield return deathDelay;
         healthBarColor.a = 0;
         healtBar.color = healthBarColor;
         color.a = 0;

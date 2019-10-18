@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1050637701}
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0.145, y: -0.5700004, z: 0}
+  m_LocalPosition: {x: -0.35, y: -0.44, z: -1}
   m_LocalScale: {x: 1, y: 0.30000037, z: 5}
   m_Children: []
   m_Father: {fileID: 6426640394760511951}
@@ -4824,7 +4824,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 222658761
-  m_SortingLayer: 1
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 57c2b84c400744124aeb83f543c5bad2, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -4870,11 +4870,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0af0addf9f50a43be9f2674abb666ecd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 1024
-  raycastLengthRightAndLeftSide: 1
-  raycastLengtBottomAndTop: 0.3
+  particle: {fileID: 1050637701}
 --- !u!60 &3206882829711663847
 PolygonCollider2D:
   m_ObjectHideFlags: 0

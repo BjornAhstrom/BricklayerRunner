@@ -4,10 +4,30 @@ using UnityEngine;
 
 public class PlayerSpawnerController : MonoBehaviour
 {
+    [SerializeField] Transform checkPoint1;
+    [SerializeField] Transform checkPoint2;
+
     [SerializeField] Transform startPosition;
+
+    Vector2 currentCheckPointPosition;
+
+    private YieldInstruction startDelay = new WaitForSeconds(0.2f);
 
     private void Start()
     {
+        if (PlayerController.Instance.runTroughCheckPoint1)
+        {
+            currentCheckPointPosition = checkPoint1.position;
+        }
+        else if (PlayerController.Instance.runTroughCheckPoint2)
+        {
+            currentCheckPointPosition = checkPoint2.position;
+        }
+        else
+        {
+            currentCheckPointPosition = startPosition.position;
+        }
+
         StartCoroutine(PlayerStartPosition());
     }
 
@@ -15,10 +35,11 @@ public class PlayerSpawnerController : MonoBehaviour
     {
         PlayerController.Instance.gameObject.SetActive(false);
 
-        PlayerController.Instance.transform.position = startPosition.position;
+        PlayerController.Instance.transform.position = currentCheckPointPosition;
+
         PlayerController.Instance.MakePlayerSmaller();
 
-        yield return new WaitForSeconds(0.2f);
+        yield return startDelay;
 
         PlayerController.Instance.gameObject.SetActive(true);
     }

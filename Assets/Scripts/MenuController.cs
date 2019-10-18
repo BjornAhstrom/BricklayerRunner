@@ -17,9 +17,13 @@ public class MenuController : MonoBehaviour
     void Start()
     {
         PlayerController.Instance.gameObject.SetActive(false);
-        IncreaseTopScore(PlayerController.Instance.playerScore, currentTopScore);
+        //IncreaseTopScore(PlayerController.Instance.playerScore, currentTopScore);
+        currentTopScore = PlayerPrefs.GetInt("HighScore");
+
         ShowTopScore(currentTopScore);
         PlayerController.Instance.playerScore = 0;
+
+        
     }
 
     void ShowTopScore(int topScore = 0)
@@ -27,17 +31,17 @@ public class MenuController : MonoBehaviour
         scoreText.text = "Top score: " + topScore;
     }
 
-    void IncreaseTopScore(int newTopScore, int oldTopScore)
-    {
-        if (newTopScore > oldTopScore)
-        {
-            currentTopScore = newTopScore;
-        }
-        else
-        {
-            currentTopScore = oldTopScore;
-        }
-    }
+    //void IncreaseTopScore(int newTopScore, int oldTopScore)
+    //{
+    //    if (newTopScore > oldTopScore)
+    //    {
+    //        currentTopScore = newTopScore;
+    //    }
+    //    else
+    //    {
+    //        currentTopScore = oldTopScore;
+    //    }
+    //}
 
     public void ChangeScene()
     {

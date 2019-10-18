@@ -10,6 +10,7 @@ public class ChaseBeahviour : StateMachineBehaviour
 
     public float followSpeed = 350f;
     int distansToPlayerHash = Animator.StringToHash("DistanceToPlayer");
+    int runHash = Animator.StringToHash("Run");
 
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -36,6 +37,11 @@ public class ChaseBeahviour : StateMachineBehaviour
         //animator.transform.position = Vector2.MoveTowards(current, target, enemyFollowSpeed * Time.deltaTime);
 
         animator.SetFloat(distansToPlayerHash, Vector2.Distance(current, target));
+
+        //if ()
+        //{
+        //    animator.SetBool(runHash, true);
+        //}
 
     }
 

@@ -294,6 +294,9 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 256
+  wallLayerMask:
+    serializedVersion: 2
+    m_Bits: 1024
   bar: {fileID: 1694794053746542749}
   positions: {fileID: 0}
   enemyHealthBarStatusSpeed: 0.01
@@ -302,7 +305,9 @@ MonoBehaviour:
   boxColliderHitDistance: 5
   greenStatusBarHeight: 1
   nrOfHits: 10
-  enemyIsAlive: 0
+  jumpOnHead: 0
+  runRight: 0
+  runLeft: 0
 --- !u!50 &1694794052827200450
 Rigidbody2D:
   serializedVersion: 4

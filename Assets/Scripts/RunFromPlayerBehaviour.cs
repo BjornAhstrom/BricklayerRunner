@@ -2,60 +2,59 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RunBehavipur : StateMachineBehaviour
+public class RunFromPlayerBehaviour : StateMachineBehaviour
 {
-    Transform playerTransform;
     EnemyController enemy;
     Rigidbody2D rb;
 
-    public float enemyRunSpeed = 500f;
-    float timeToRun;
-    int runHash = Animator.StringToHash("Run");
-    int distansToPlayerHash = Animator.StringToHash("DistanceToPlayer");
+    int runRightHash = Animator.StringToHash("RunRight");
+    int runLeftHash = Animator.StringToHash("RunLeft");
+
+    float runTime;
 
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        Debug.Log("Run from playerBehaviour");
+
         enemy = animator.gameObject.GetComponent<EnemyController>();
         rb = enemy.GetComponent<Rigidbody2D>();
 
-        if (playerTransform == null)
-        {
-            playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
-        }
-
-        timeToRun = Random.Range(1f, 2f);
+        runTime = Random.Range(0.5f, 1f);
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        timeToRun -= Time.deltaTime;
+        runTime -= Time.deltaTime;
 
-        if (timeToRun <= 0)
+        if (enemy.runLeft && !enemy.runRight)
         {
-            animator.SetBool(runHash, false);
+            Vector2 direction = new Vector2(Vector2.left.normalized.x, 0);
+
+            rb.velocity = new Vector2(direction.x * 700f * Time.deltaTime, rb.velocity.y);
+        }
+        else if (enemy.runRight && !enemy.runLeft)
+        {
+            Vector2 direction = new Vector2(Vector2.right.normalized.x, 0);
+
+            rb.velocity = new Vector2(direction.x * 700f * Time.deltaTime, rb.velocity.y);
         }
 
-        Vector2 current = animator.transform.position;
-        Vector2 target = playerTransform.position;
-
-        Vector2 direction = new Vector2((target - current).normalized.x, 0);
-
-        rb.velocity = new Vector2(direction.x * enemyRunSpeed * Time.deltaTime, rb.velocity.y);
-
-        animator.SetFloat(distansToPlayerHash, Vector2.Distance(current, target));
-
-        //if (enemy.jumpOnHead == true)
-        //{
-        //    animator.SetBool(runHash, true);
-        //}
+        if (runTime <= 0)
+        {
+            enemy.runLeft = false;
+            enemy.runRight = false;
+            animator.SetBool(runLeftHash, false);
+            animator.SetBool(runRightHash, false);
+        }
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        animator.SetBool(runHash, false);
+        animator.SetBool(runLeftHash, false);
+        animator.SetBool(runRightHash, false);
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

@@ -197,13 +197,10 @@ public class EnemyController : MonoBehaviour
 
         if (gameObject.CompareTag("Boss1"))
         {
-            
-
             GameObject wall = GameObject.FindGameObjectWithTag("WallSectionBoss");
 
             wall.GetComponent<WallSectionBossController>().StartBreakingTheWall();
 
-            //SceneHandler.Instance.ChangeLevelTo("Level2");
         }
     }
 }

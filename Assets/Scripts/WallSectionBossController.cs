@@ -6,11 +6,6 @@ public class WallSectionBossController : MonoBehaviour
 {
     [SerializeField] List<GameObject> wallSections = new List<GameObject>();
 
-    //private void Start()
-    //{
-    //    StartCoroutine(MakeWallDisappear());
-    //}
-
     public void StartBreakingTheWall()
     {
         StartCoroutine(MakeWallDisappear());
@@ -30,4 +25,7 @@ public class WallSectionBossController : MonoBehaviour
             }
         }
     }
+
+
+
 }

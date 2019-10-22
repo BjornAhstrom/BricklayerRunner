@@ -25,6 +25,7 @@ TagManager:
   - WallSectionBoss
   - RightBound
   - FirstWallSectionBoss
+  - SoundManager
   layers:
   - Default
   - TransparentFX

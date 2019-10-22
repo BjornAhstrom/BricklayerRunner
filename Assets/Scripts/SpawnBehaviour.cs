@@ -7,20 +7,20 @@ public class SpawnBehaviour : StateMachineBehaviour
     EnemyController enemy;
     Rigidbody2D rb;
 
+    [Range(0, 10)] public float standStillWhenTimeSpawn = 5f;
     int startWalkHash = Animator.StringToHash("StartWalk");
+
     float timeToStandStill;
 
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         enemy = animator.gameObject.GetComponent<EnemyController>();
-        rb = enemy.GetComponent<Rigidbody2D>();
 
-        //enemy.enemyIsAlive = false;
-        //rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
+        rb = enemy.GetComponent<Rigidbody2D>();
         rb.constraints = RigidbodyConstraints2D.FreezeAll;
         
-        timeToStandStill = 5f;
+        timeToStandStill = standStillWhenTimeSpawn;
 
     }
 
@@ -31,8 +31,6 @@ public class SpawnBehaviour : StateMachineBehaviour
 
         if (timeToStandStill <= 0)
         {
-            //enemy.enemyIsAlive = true;
-
             rb.constraints = RigidbodyConstraints2D.None;
             rb.freezeRotation = true;
             animator.SetBool(startWalkHash, true);

@@ -6,12 +6,12 @@ public class BrickPileController : MonoBehaviour
 {
     PlayerThrowsBrickController throwsBrickController;
 
+    [Range(0, 10)] public int bricksAmount = 4;
+
     private void Start()
     {
         throwsBrickController = GameObject.FindGameObjectWithTag("GameManager").GetComponent<PlayerThrowsBrickController>(); 
     }
-
-    private int bricksAmount = 4;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {

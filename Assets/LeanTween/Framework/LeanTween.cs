@@ -2860,7 +2860,15 @@ public class LeanTween : MonoBehaviour {
         }
     }
 
+    internal static float value(GameObject gameObject, float v1, float v2)
+    {
+        throw new NotImplementedException();
+    }
 
+    internal static float value(float orthographicSize, float v)
+    {
+        throw new NotImplementedException();
+    }
 } // End LeanTween class
 
 public class LTUtility {

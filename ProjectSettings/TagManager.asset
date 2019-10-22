@@ -22,6 +22,8 @@ TagManager:
   - Boss1
   - Button
   - IncreaseLife
+  - WallSectionBoss
+  - RightBound
   layers:
   - Default
   - TransparentFX

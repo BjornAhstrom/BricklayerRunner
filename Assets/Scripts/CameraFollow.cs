@@ -6,11 +6,11 @@ using TMPro;
 public class CameraFollow : MonoBehaviour
 {
     [Range(0, 1)] public float smoothDampTime = 0.15f;
-    [Range(0, 10)] public float cameraOrthographicSize = 2.1f;
+    [Range(0, 10)] public float cameraOrthographicSize = 0f;
     [Range(-10, 10)] public float cameraMinPlayerYBottomCameraPosition = 0.05f;
     [Range(-10, 10)] public float cameraMaxPlayerYTopCameraPosition = 0.05f;
-
-    public Transform topBounds;
+    //[Range(-100, 100)] public float cameraZoom = -10f;
+ 
     public Transform leftBounds;
     public Transform rightBounds;
 
@@ -29,6 +29,10 @@ public class CameraFollow : MonoBehaviour
 
     private void Start()
     {
+        //Vector2 test = new Vector2(282f, rightBounds.position.y);
+
+        //rightBounds.position = test;
+
         camHeigt = Camera.main.orthographicSize * cameraOrthographicSize;
         camWidth = camHeigt * Camera.main.aspect;
 
@@ -38,7 +42,7 @@ public class CameraFollow : MonoBehaviour
         levelMinX = leftBounds.position.x + leftBoundWidth + (camWidth / splitScreen);
         levelMaxX = rightBounds.position.x + rightBoundsWidth - (camWidth / splitScreen);
 
-        
+
     }
 
     private void Update()
@@ -59,6 +63,8 @@ public class CameraFollow : MonoBehaviour
             y = Mathf.SmoothDamp(transform.position.y, playerY, ref smoothDampVelocity.y, smoothDampTime);
 
             transform.position = new Vector3(x, y, transform.position.z);
+
+ 
         }
     }
 }

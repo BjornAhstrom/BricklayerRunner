@@ -4,25 +4,15 @@ using UnityEngine;
 
 public class PlayerThrowsBrickController : MonoBehaviour
 {
-    //PlayerController playerController;
-
-    [Range(500, 5000)] public float brickSpeed = 1000f;
-
     public GameObject brickPrefab;
-    public int playersCurrentBricks = 0;
     public List<Rigidbody2D> bricks = new List<Rigidbody2D>();
 
     private GameObject brick;
 
-    private void Start()
-    {
-        //playerController = GetComponent<PlayerController>();
-    }
-    //private void Update()
-    //{
-    //    Debug.Log("Collected bricks " + playersCurrentBricks);
-    //}
+    [Range(500, 5000)] public float brickSpeed = 1000f;
 
+    public int playersCurrentBricks = 0;
+    
     public void initializeBrickPrefabObject()
     {
             for (int i = 0; i < playersCurrentBricks; i++)
@@ -60,8 +50,8 @@ public class PlayerThrowsBrickController : MonoBehaviour
 
             rb.AddForce(position * brickSpeed);
             playersCurrentBricks--;
+
             yield return 0;
-            //yield return new WaitForEndOfFrame();
             brickPrefab.gameObject.SetActive(false);
         }
     }

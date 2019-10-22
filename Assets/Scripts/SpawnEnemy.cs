@@ -6,9 +6,12 @@ public class SpawnEnemy : MonoBehaviour
 {
     public GameObject enemyPrefab;
     public Transform spawnPos;
-  
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        ZoomOut();
+
+
         // if collision is player
         if (collision.CompareTag("Player"))
         {
@@ -21,6 +24,14 @@ public class SpawnEnemy : MonoBehaviour
         }
         
         
+    }
+
+    void ZoomOut()
+    {
+        LeanTween.value(Camera.main.gameObject, Camera.main.orthographicSize, 9f, 2f).setOnUpdate((float test) =>
+        {
+            Camera.main.orthographicSize = test;
+        });
     }
 
 }

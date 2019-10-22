@@ -7,6 +7,9 @@ public class StopBehaviour : StateMachineBehaviour
     EnemyController enemy;
     Rigidbody2D rb;
 
+    [Range(0, 10)] public float firstStopLengthTime = 1f;
+    [Range(0, 10)] public float secondStopLengthTime = 3f;
+
     int stopHash = Animator.StringToHash("Stop");
     int runHash = Animator.StringToHash("Run");
 
@@ -18,7 +21,7 @@ public class StopBehaviour : StateMachineBehaviour
         enemy = animator.gameObject.GetComponent<EnemyController>();
         rb = enemy.GetComponent<Rigidbody2D>();
 
-        timeToStop = Random.Range(1f, 3f);
+        timeToStop = Random.Range(firstStopLengthTime, secondStopLengthTime);
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks

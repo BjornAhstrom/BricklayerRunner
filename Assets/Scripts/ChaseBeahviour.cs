@@ -10,7 +10,6 @@ public class ChaseBeahviour : StateMachineBehaviour
 
     public float followSpeed = 350f;
     int distansToPlayerHash = Animator.StringToHash("DistanceToPlayer");
-    //int runHash = Animator.StringToHash("Run");
     int runRightHash = Animator.StringToHash("RunRight");
     int runLeftHash = Animator.StringToHash("RunLeft");
 
@@ -36,8 +35,6 @@ public class ChaseBeahviour : StateMachineBehaviour
         Vector2 direction = new Vector2((target - current).normalized.x, 0);
 
         rb.velocity = new Vector2(direction.x * followSpeed * Time.deltaTime, rb.velocity.y);
-
-        //animator.transform.position = Vector2.MoveTowards(current, target, enemyFollowSpeed * Time.deltaTime);
 
         animator.SetFloat(distansToPlayerHash, Vector2.Distance(current, target));
 

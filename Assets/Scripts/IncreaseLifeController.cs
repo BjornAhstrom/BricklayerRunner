@@ -5,6 +5,7 @@ using UnityEngine;
 public class IncreaseLifeController : MonoBehaviour
 {
     [Range(0, 1)] public float increaseLife = 0.08f;
+
     private float playerHealthBar = 1f;
 
     private void OnTriggerEnter2D(Collider2D collision)

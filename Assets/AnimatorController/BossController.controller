@@ -568,6 +568,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c42a73ad80be24ab7a6c4dbba82b0814, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  runFromPlayerSpeed: 700
+  firstRunLenghtTime: 0.5
+  secondRunLenghtTime: 1
 --- !u!1101 &5313015803469835224
 AnimatorStateTransition:
   m_ObjectHideFlags: 1

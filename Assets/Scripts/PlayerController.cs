@@ -11,26 +11,34 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] LayerMask groundMask;
     [SerializeField] LayerMask enemyMask;
+
     [HideInInspector] public int playerScore = 0;
-    
+    [HideInInspector] public bool gameOver = false;
+    [HideInInspector] public bool runTroughCheckPoint1 = false;
+    [HideInInspector] public bool runTroughCheckPoint2 = false;
+    [HideInInspector] public bool playerDied = false;
 
     [Range(0, 10)] public float playerDistanceToGround = 1.2f;
     [Range(0, 0.01f)] public float playerHealthBarStatusSpeed = 0.005f;
     [Range(0, 5)] public float playerHitDistanceLeftAndRightSideOn = 1.2f;
     [Range(0, 5)] public float makeplayerBigger = 1.4f;
+    [Range(0, 5)] public float boxCastWidth = 0.3f;
+    [Range(0, 5)] public float boxCastHeigt = 0.3f;
+    [Range(0, 2)] public float healthBarStatus = 1f;
+    [Range(0, 100)] public float greenStatusBarHeight = 1f;
 
-    public float playerOriginalSize = 0.3f;
-    public float greenStatusBarHeight = 1f;
-    public float healthBarStatus = 1f;
-    public bool gameOver = false;
-    public int startLives = 3;
-    public bool playerDied = false;
     public string currentLevel = "Level1";
-    public bool runTroughCheckPoint1 = false;
-    public bool runTroughCheckPoint2 = false;
+    public int startLives = 3;
+    public int currentLives;
 
+
+
+
+    private float playerOriginalSize = 0.3f;
     private float bigPlayerHealtBarStatusSpeed = 0;
     private float smallPlayerHealtBarStatusSpeed = 0.005f;
+    private int resetLives;
+    private float resetHealthBarStatus;
 
     private static PlayerController _instance;
 
@@ -60,13 +68,6 @@ public class PlayerController : MonoBehaviour
             _instance = this;
             DontDestroyOnLoad(gameObject);
         }
-
-        //if (gameManager == null)
-        //{
-        //    gameManager = GameObject.FindGameObjectWithTag("GameManager");
-        //}
-
-        //game = gameManager.GetComponent<GameManager>();
     }
 
     void Update()
@@ -79,7 +80,7 @@ public class PlayerController : MonoBehaviour
     {
         Vector2 middle = new Vector2(transform.position.x, transform.position.y); 
 
-        RaycastHit2D groundMiddle = Physics2D.BoxCast(middle, new Vector2(0.3f, 0.3f), 0, Vector2.down, playerDistanceToGround, groundMask);
+        RaycastHit2D groundMiddle = Physics2D.BoxCast(middle, new Vector2(boxCastWidth, boxCastHeigt), 0, Vector2.down, playerDistanceToGround, groundMask);
 
         if (groundMiddle.collider == null)
         {
@@ -91,7 +92,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Gizmos.DrawWireCube(transform.position + Vector3.down * playerDistanceToGround, new Vector3(0.3f,0.3f, 0));
+        Gizmos.DrawWireCube(transform.position + Vector3.down * playerDistanceToGround, new Vector3(boxCastWidth, boxCastHeigt, 0));
     }
 
     void CheckIfPlayerCollideWithEnemy()
@@ -109,7 +110,7 @@ public class PlayerController : MonoBehaviour
 
     public void HealtBarStatus()
     {
-        if (healthBarStatus < 0.001f)
+        if (healthBarStatus < 0)
         {
             startLives--;
             playerDied = true;
@@ -124,20 +125,23 @@ public class PlayerController : MonoBehaviour
                 SaveScoreToDevice();
                 SceneHandler.Instance.ChangeLevelTo("MainMenu");
                 gameObject.SetActive(false);
-                healthBarStatus = 1.0f;
+                healthBarStatus = 1f;
                 startLives = 3;
 
-                //StartCoroutine(TriggGameOverSign());
+                GameOver();
             }
         }
     }
 
-    IEnumerator TriggGameOverSign()
+    void GameOver()
     {
-        //game.GameOverText();
+        // if enter Restart game button
+        // Restart the game from the beginning (Level1)
 
-        yield return new WaitForSeconds(2);
-        
+
+        // if enter Main menu button
+        // Go to MainMenu Scene
+
     }
 
     public void MakePlayerBigger()
@@ -177,7 +181,7 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.CompareTag("Water"))
         {
-            Debug.Log("Not hiting the " + collision.name);
+            Debug.Log("Not hit the " + collision.name);
         }
     }
 

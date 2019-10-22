@@ -29,11 +29,6 @@ public class InputController : MonoBehaviour
         dontMove = true;
     }
 
-    void Update()
-    {
-        PlayerController.Instance.HealtBarStatus();
-    }
-
     private void FixedUpdate()
     {
         HandleMove();
@@ -97,7 +92,7 @@ public class InputController : MonoBehaviour
 
     void StopMoving()
     {
-        rb.velocity = new Vector2(Mathf.SmoothStep(0f, 1f, Time.fixedDeltaTime), rb.velocity.y);//0f, rb.velocity.y);
+        rb.velocity = new Vector2(0f, rb.velocity.y); //new Vector2(Mathf.SmoothStep(0f, 1f, Time.fixedDeltaTime), rb.velocity.y);
     }
 
     public void ThrowBricks()

@@ -16,7 +16,7 @@ public class LoadSceneController : MonoBehaviour
         LoadSceneStatusBar();
     }
 
-    // Ändrar på den gröna bakgrundens x led i progress baren
+    // Change the green background in x in the progressbar
     void LoadSceneStatusBar()
     {
         LeanTween.scaleX(statusBar, 1f, barStatus).setEaseLinear().setOnComplete(LoadSceneStatusBar);

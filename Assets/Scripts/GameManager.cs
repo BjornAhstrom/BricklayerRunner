@@ -5,7 +5,7 @@ using TMPro;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] GameOverController gameOverController;
+    //[SerializeField] GameOverController gameOverController;
 
     public LayerMask groundMask;
     public LayerMask playerLayerMask;
@@ -22,8 +22,8 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        PlayerController.Instance.gameOver = false;
-        gameOverController.gameObject.SetActive(false);
+        //PlayerController.Instance.gameOver = false;
+        //gameOverController.gameObject.SetActive(false);
     }
 
     private void Update()
@@ -37,9 +37,9 @@ public class GameManager : MonoBehaviour
         bar.transform.localScale = new Vector2(PlayerController.Instance.healthBarStatus, greenStatusBarHeight);
     }
 
-    public void GameOverText()
-    {
-        gameOverController.gameObject.SetActive(true);
-        gameOverText.text = "Game over";
-    }
+    //public void GameOverText()
+    //{
+    //    gameOverController.gameObject.SetActive(true);
+    //    gameOverText.text = "Game over";
+    //}
 }

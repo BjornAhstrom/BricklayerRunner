@@ -7,10 +7,13 @@ public class RunFromPlayerBehaviour : StateMachineBehaviour
     EnemyController enemy;
     Rigidbody2D rb;
 
-    int runRightHash = Animator.StringToHash("RunRight");
-    int runLeftHash = Animator.StringToHash("RunLeft");
+    [Range(0, 1000)] public float runFromPlayerSpeed = 700f;
+    [Range(0, 5)] public float firstRunLenghtTime = 0.5f;
+    [Range(0, 5)] public float secondRunLenghtTime = 1f;
 
-    float runTime;
+    private int runRightHash = Animator.StringToHash("RunRight");
+    private int runLeftHash = Animator.StringToHash("RunLeft");
+    private float runTime;
 
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -20,7 +23,7 @@ public class RunFromPlayerBehaviour : StateMachineBehaviour
         enemy = animator.gameObject.GetComponent<EnemyController>();
         rb = enemy.GetComponent<Rigidbody2D>();
 
-        runTime = Random.Range(0.5f, 1f);
+        runTime = Random.Range(firstRunLenghtTime, secondRunLenghtTime);
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
@@ -28,26 +31,9 @@ public class RunFromPlayerBehaviour : StateMachineBehaviour
     {
         runTime -= Time.deltaTime;
 
-        if (enemy.runLeft && !enemy.runRight)
-        {
-            Vector2 direction = new Vector2(Vector2.left.normalized.x, 0);
+        RunFromPlayerLeftOrRight();
 
-            rb.velocity = new Vector2(direction.x * 700f * Time.deltaTime, rb.velocity.y);
-        }
-        else if (enemy.runRight && !enemy.runLeft)
-        {
-            Vector2 direction = new Vector2(Vector2.right.normalized.x, 0);
-
-            rb.velocity = new Vector2(direction.x * 700f * Time.deltaTime, rb.velocity.y);
-        }
-
-        if (runTime <= 0)
-        {
-            enemy.runLeft = false;
-            enemy.runRight = false;
-            animator.SetBool(runLeftHash, false);
-            animator.SetBool(runRightHash, false);
-        }
+        WhenRunTimeHasRunOut(animator, false);
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
@@ -68,4 +54,31 @@ public class RunFromPlayerBehaviour : StateMachineBehaviour
     //{
     //    // Implement code that sets up animation IK (inverse kinematics)
     //}
+
+    void RunFromPlayerLeftOrRight()
+    {
+        if (enemy.runLeft && !enemy.runRight)
+        {
+            Vector2 direction = new Vector2(Vector2.left.normalized.x, 0);
+
+            rb.velocity = new Vector2(direction.x * runFromPlayerSpeed * Time.deltaTime, rb.velocity.y);
+        }
+        else if (enemy.runRight && !enemy.runLeft)
+        {
+            Vector2 direction = new Vector2(Vector2.right.normalized.x, 0);
+
+            rb.velocity = new Vector2(direction.x * runFromPlayerSpeed * Time.deltaTime, rb.velocity.y);
+        }
+    }
+
+    void WhenRunTimeHasRunOut(Animator animator, bool boolValue)
+    {
+        if (runTime <= 0)
+        {
+            enemy.runLeft = boolValue;
+            enemy.runRight = boolValue;
+            animator.SetBool(runLeftHash, boolValue);
+            animator.SetBool(runRightHash, boolValue);
+        }
+    }
 }

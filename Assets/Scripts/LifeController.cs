@@ -5,10 +5,12 @@ using UnityEngine.SceneManagement;
 
 public class LifeController : MonoBehaviour
 {
+    Vector2 mainCamera;
+
+    public Vector2 offset;
     public float distance = 0.8f;
 
     private List<GameObject> lives = new List<GameObject>();
-
 
     private void Start()
     {
@@ -17,6 +19,7 @@ public class LifeController : MonoBehaviour
 
     private void Update()
     {
+        SetLifeControllerToFollowMainCamera();
         UpdateRemovedLives();
     }
 
@@ -26,14 +29,12 @@ public class LifeController : MonoBehaviour
         {
             RemoveLives();
             PlayerController.Instance.playerDied = false;
-            //InitializeLife(PlayerController.Instance.startLives);
-            //SceneManager.LoadScene("Level1");
         }
     }
 
     public void InitializeLife(int lifeCount)
     {
-        // Letar reda på första livet
+        // Looking for first life
         GameObject firstLife = transform.GetChild(0).gameObject;
         lives.Add(firstLife);
 
@@ -44,7 +45,7 @@ public class LifeController : MonoBehaviour
             return;
         }
 
-        // Kopiera firstLife
+        // Copy firstLife
         for (int i = 0; i < lifeCount -1; i++ )
         {
             GameObject life = Instantiate(firstLife);
@@ -68,5 +69,11 @@ public class LifeController : MonoBehaviour
 
         Destroy(lastLife);
         return true;
+    }
+
+    void SetLifeControllerToFollowMainCamera()
+    {
+        mainCamera = Camera.main.transform.position;
+        transform.GetChild(0).position = new Vector2(mainCamera.x + offset.x, mainCamera.y + offset.y);
     }
 }

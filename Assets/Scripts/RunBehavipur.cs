@@ -8,7 +8,10 @@ public class RunBehavipur : StateMachineBehaviour
     EnemyController enemy;
     Rigidbody2D rb;
 
-    public float enemyRunSpeed = 500f;
+    [Range(0, 10)] public float firstRunLengthTime = 1f;
+    [Range(0, 10)] public float secondRunLegthTime = 2f;
+    [Range(0, 1000)] public float enemyRunSpeed = 500f;
+
     float timeToRun;
     int runHash = Animator.StringToHash("Run");
     int distansToPlayerHash = Animator.StringToHash("DistanceToPlayer");
@@ -24,7 +27,7 @@ public class RunBehavipur : StateMachineBehaviour
             playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         }
 
-        timeToRun = Random.Range(1f, 2f);
+        timeToRun = Random.Range(firstRunLengthTime, secondRunLegthTime);
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
@@ -45,11 +48,6 @@ public class RunBehavipur : StateMachineBehaviour
         rb.velocity = new Vector2(direction.x * enemyRunSpeed * Time.deltaTime, rb.velocity.y);
 
         animator.SetFloat(distansToPlayerHash, Vector2.Distance(current, target));
-
-        //if (enemy.jumpOnHead == true)
-        //{
-        //    animator.SetBool(runHash, true);
-        //}
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state

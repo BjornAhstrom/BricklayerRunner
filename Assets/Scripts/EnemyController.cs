@@ -10,17 +10,19 @@ public class EnemyController : MonoBehaviour
 
     [HideInInspector] public Transform positions;
 
-    //[Range(100, 1000)] public float speed = 400f;
     [Range(0, 0.1f)] public float enemyHealthBarStatusSpeed = 0.01f;
     [Range(0, 5)] public float boxColliderWidth = 0.5f;
     [Range(0, 5)] public float boxColliderHeight = 0.3f;
     [Range(0, 10)] public float boxColliderHitDistance = 1f;
     [Range(0, 5)] public float greenStatusBarHeight = 1f;
+    [Range(0, 1000)] public float drawRayCastLineLenght = 100f;
+
     public int nrOfHits = 5;
-    //public bool enemyIsAlive = false;
-    public bool jumpOnHead = false;
-    public bool runRight = false;
-    public bool runLeft = false;
+    public int pointsFromDamage = 10;
+
+    [HideInInspector] public bool jumpOnHead = false;
+    [HideInInspector] public bool runRight = false;
+    [HideInInspector] public bool runLeft = false;
 
     private SpriteRenderer spriteRenderer;
     private SpriteRenderer sprite;
@@ -36,7 +38,6 @@ public class EnemyController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         sprite = GetComponent<SpriteRenderer>();
-        //enemyIsAlive = true;
     }
 
     private void Update()
@@ -44,7 +45,6 @@ public class EnemyController : MonoBehaviour
         enemyHeight = transform.position.y / 2;
         WhenEnemyFollowThePlayerFlipXValue();
         HealtBarStatus();
-        //    Debug.Log("Run left is " + runLeft);
     }
 
     void WhenEnemyFollowThePlayerFlipXValue()
@@ -68,11 +68,20 @@ public class EnemyController : MonoBehaviour
 
         if (collision.transform.CompareTag("Brick") && hit) // && enemyIsAlive == true)
         {
-            PlayerController.Instance.playerScore += 10;
+            PlayerController.Instance.playerScore += pointsFromDamage;
             healthBarStatus -= (1f / (float) nrOfHits);
             UpdateHealthBarStatus();
             
             hit = false;
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.transform.CompareTag("Brick") && hit == false)
+        {
+            //StartCoroutine(SetHitTo(true));
+            hit = true;
         }
     }
 
@@ -85,8 +94,8 @@ public class EnemyController : MonoBehaviour
         Gizmos.color = Color.red;
 
         Vector2 originEnemy = new Vector2(transform.position.x, transform.position.y);
-        Gizmos.DrawRay(originEnemy, Vector2.left*100);
-        Gizmos.DrawRay(originEnemy, Vector2.right*100);
+        Gizmos.DrawRay(originEnemy, Vector2.left * drawRayCastLineLenght);
+        Gizmos.DrawRay(originEnemy, Vector2.right * drawRayCastLineLenght);
     }
 
     public void CheckIfPlayerJumpOnHead()
@@ -98,7 +107,7 @@ public class EnemyController : MonoBehaviour
         if (checkIfPlayerJumpOnHead.collider != null && hit != false)
         {
             checkIfEnemyCanRunToLeftOrRight();
-            PlayerController.Instance.playerScore += 10;
+            PlayerController.Instance.playerScore += pointsFromDamage;
             healthBarStatus -= (1f / (float)nrOfHits);
             UpdateHealthBarStatus();
             jumpOnHead = true;
@@ -116,33 +125,25 @@ public class EnemyController : MonoBehaviour
         {
             if (hitWallRightSide.distance > hitWallLeftSide.distance)
             {
-                // Gå till höger
+                // Run to right
                 runRight = true;
 
             }
             else if(hitWallLeftSide.distance < hitWallRightSide.distance)
             {
-                // Gå till vänster
+                // Run to left
                 runLeft = true;
             }
         }
         else if (hitWallLeftSide.collider != null)
         {
-            // Gå till höger
+            // Run to right
             runRight = true;
         }
         else if ( hitWallRightSide.collider != null)
         {
-            // Gå till vänster
+            // Run to left
             runLeft = true;
-        }
-    }
-
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        if (collision.transform.CompareTag("Brick") && hit == false)
-        {
-            StartCoroutine(SetHitTo(true));
         }
     }
 
@@ -151,7 +152,8 @@ public class EnemyController : MonoBehaviour
         if (healthBarStatus <= enemyHealthBarStatusSpeed)
         {
             StartCoroutine(InactivateEnemy());
-            StartCoroutine(SetHitTo(true));
+            //StartCoroutine(SetHitTo(true));
+            hit = true;
         }
     }
 
@@ -160,11 +162,11 @@ public class EnemyController : MonoBehaviour
         bar.transform.localScale = new Vector2(healthBarStatus, greenStatusBarHeight);
     }
 
-IEnumerator SetHitTo(bool trueOrFalse)
-    {
-        yield return new WaitForSeconds(0.2f);
-        hit = trueOrFalse;
-    }
+//IEnumerator SetHitTo(bool trueOrFalse)
+//    {
+//        yield return new WaitForSeconds(0.2f);
+//        hit = trueOrFalse;
+//    }
 
     IEnumerator InactivateEnemy()
     {
@@ -195,7 +197,13 @@ IEnumerator SetHitTo(bool trueOrFalse)
 
         if (gameObject.CompareTag("Boss1"))
         {
-            SceneHandler.Instance.ChangeLevelTo("Level2");
+            
+
+            GameObject wall = GameObject.FindGameObjectWithTag("WallSectionBoss");
+
+            wall.GetComponent<WallSectionBossController>().StartBreakingTheWall();
+
+            //SceneHandler.Instance.ChangeLevelTo("Level2");
         }
     }
 }

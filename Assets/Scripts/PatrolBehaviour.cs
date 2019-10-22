@@ -8,6 +8,8 @@ public class PatrolBehaviour : StateMachineBehaviour
     EnemyController enemy;
 
     public float patrolSpeed = 250f;
+    [Range(0, 10)] public float firstPatrolLengthTime = 3f;
+    [Range(0, 10)] public float seconfPatroleLengthTim = 6f;
 
     int randomPointsIndex;
     int playerDistanceHash = Animator.StringToHash("DistanceToPlayer");
@@ -33,7 +35,7 @@ public class PatrolBehaviour : StateMachineBehaviour
 
         rb.velocity = Vector3.zero;
 
-        timeStillWalking = Random.Range(3f, 6f);
+        timeStillWalking = Random.Range(firstPatrolLengthTime, seconfPatroleLengthTim);
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks

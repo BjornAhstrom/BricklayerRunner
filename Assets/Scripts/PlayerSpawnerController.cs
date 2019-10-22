@@ -6,7 +6,6 @@ public class PlayerSpawnerController : MonoBehaviour
 {
     [SerializeField] Transform checkPoint1;
     [SerializeField] Transform checkPoint2;
-
     [SerializeField] Transform startPosition;
 
     Vector2 currentCheckPointPosition;

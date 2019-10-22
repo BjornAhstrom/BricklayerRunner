@@ -144,15 +144,21 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   playerScore: 1740
+  gameOver: 0
+  runTroughCheckPoint1: 0
+  runTroughCheckPoint2: 0
+  playerDied: 0
   playerDistanceToGround: 1.2
   playerHealthBarStatusSpeed: 0.005
   playerHitDistanceLeftAndRightSideOn: 1.2
   makeplayerBigger: 1.4
-  playerOriginalSize: 0.3
-  greenStatusBarHeight: -0.3
+  boxCastWidth: 0.3
+  boxCastHeigt: 0.3
   healthBarStatus: 1.47
+  greenStatusBarHeight: -0.3
+  currentLevel: Level1
   startLives: 3
-  playerDied: 0
+  currentLives: 0
 --- !u!58 &2405322084688377938
 CircleCollider2D:
   m_ObjectHideFlags: 0

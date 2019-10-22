@@ -7,9 +7,9 @@ public class CollectedBricksController : MonoBehaviour
 {
     [SerializeField] PlayerThrowsBrickController playerThrowsBrickController;
 
-    public Vector2 offset;
-    //public CameraFollow camera;
     TextMeshPro collectedBricksText;
+    public Vector2 offset;
+
     public int bricksAmount = 0;
 
     private Vector2 mainCameraPosition;

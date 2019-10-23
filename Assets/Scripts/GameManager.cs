@@ -5,7 +5,7 @@ using TMPro;
 
 public class GameManager : MonoBehaviour
 {
-    //[SerializeField] GameOverController gameOverController;
+    [SerializeField] GameObject gameOverMenu;
 
     public LayerMask groundMask;
     public LayerMask playerLayerMask;
@@ -46,6 +46,8 @@ public class GameManager : MonoBehaviour
             _instance = this;
             DontDestroyOnLoad(gameObject);
         }
+
+        gameOverMenu.SetActive(false);
     }
 
     private void Update()
@@ -59,9 +61,24 @@ public class GameManager : MonoBehaviour
         bar.transform.localScale = new Vector2(PlayerController.Instance.healthBarStatus, greenStatusBarHeight);
     }
 
-    //public void GameOverText()
-    //{
-    //    gameOverController.gameObject.SetActive(true);
-    //    gameOverText.text = "Game over";
-    //}
+    public void GameOver()
+    {
+        gameOverMenu.SetActive(true);
+        Time.timeScale = 0f;
+    }
+
+    public void PlayButton()
+    {
+        SceneHandler.Instance.ChangeLevelTo(PlayerController.Instance.currentLevel);
+        PlayerController.Instance.playerScore = 0;
+        Time.timeScale = 1f;
+        gameOverMenu.SetActive(false);
+    }
+
+    public void MenuButton()
+    {
+        SceneHandler.Instance.ChangeLevelTo("MainMenu");
+        Time.timeScale = 1f;
+        gameOverMenu.SetActive(false);
+    }
 }

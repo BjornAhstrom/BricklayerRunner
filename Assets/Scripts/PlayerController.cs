@@ -28,9 +28,6 @@ public class PlayerController : MonoBehaviour
     public int startLives = 3;
     public int currentLives;
 
-
-
-
     private float playerOriginalSize = 0.3f;
     private float bigPlayerHealtBarStatusSpeed = 0;
     private float smallPlayerHealtBarStatusSpeed = 0.005f;
@@ -110,7 +107,6 @@ public class PlayerController : MonoBehaviour
     {
         if (healthBarStatus < 0)
         {
-            Debug.Log("Lives 1 " + currentLives);
             currentLives--;
             GameManager.Instance.GetComponentInChildren<LifeController>().RemoveLives();
             playerDied = true;
@@ -120,29 +116,14 @@ public class PlayerController : MonoBehaviour
             
             if (currentLives < 0)
             {
-                Debug.Log("Lives 2 " + currentLives);
                 healthBarStatus = 0;
-                //gameOver = true;
                 SaveScoreToDevice();
-                SceneHandler.Instance.ChangeLevelTo("MainMenu");
                 gameObject.SetActive(false);
                 healthBarStatus = 1f;
                 startLives = 3;
-
-                GameOver();
+                GameManager.Instance.GameOver();
             }
         }
-    }
-
-    void GameOver()
-    {
-        // if enter Restart game button
-        // Restart the game from the beginning (Level1)
-
-
-        // if enter Main menu button
-        // Go to MainMenu Scene
-
     }
 
     public void MakePlayerBigger()
@@ -159,32 +140,25 @@ public class PlayerController : MonoBehaviour
         playerDistanceToGround = 1.2f;
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Water"))
-        {
-            Debug.Log("Hit the " + collision.name);
-            //moveSpeed = 150f;
-            //jumpForce = 2.5f;
-        }
-        else if (collision.CompareTag("Grass"))
-        {
-            //moveSpeed = 450f;
-            //jumpForce = 5f;
-        }
-        else if (collision.CompareTag("OverWater"))
-        {
-            //jumpForce = 1f;
-        }
-    }
+    //private void OnTriggerEnter2D(Collider2D collision)
+    //{
+    //    if (collision.CompareTag("Water"))
+    //    {
+    //        Debug.Log("Hit the " + collision.name);
+    //        GameManager.Instance.GetComponent<InputController>().moveSpeed = 200f;
+    //        //moveSpeed = 150f;
+    //        //jumpForce = 2.5f;
+    //    }
+    //}
 
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Water"))
-        {
-            Debug.Log("Not hit the " + collision.name);
-        }
-    }
+    //private void OnTriggerExit2D(Collider2D collision)
+    //{
+    //    if (collision.CompareTag("Water"))
+    //    {
+    //        Debug.Log("Not hit the " + collision.name);
+    //        GameManager.Instance.GetComponent<InputController>().moveSpeed = 450f;
+    //    }
+    //}
 
     public void SaveScoreToDevice()
     {

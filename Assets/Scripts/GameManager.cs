@@ -14,16 +14,38 @@ public class GameManager : MonoBehaviour
     [SerializeField] TextMeshPro scoreText;
     [SerializeField] TextMeshPro gameOverText;
     [SerializeField] GameObject bar;
+    //[SerializeField] LifeController lifeController;
 
     [Range(0, 20)] public float playerMaxSpeed = 10f;
     [Range(0, 30)] public float playerJumpVelocity = 17f;
     [Range(0, 10)] public float playerDistanceToGround = 1.2f;
     [Range(0, 10)] public float enemyMoveSpeed = 5f;
 
-    private void Start()
+    private static GameManager _instance;
+
+    public static GameManager Instance
     {
-        //PlayerController.Instance.gameOver = false;
-        //gameOverController.gameObject.SetActive(false);
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = Instantiate(Resources.Load<GameObject>("GameManager")).GetComponent<GameManager>();
+            }
+            return _instance;
+        }
+    }
+
+    private void Awake()
+    {
+        if (_instance != null && _instance != this)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            _instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
     }
 
     private void Update()

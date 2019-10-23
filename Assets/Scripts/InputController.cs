@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class InputController : MonoBehaviour
 {
-    PlayerThrowsBrickController playerThrowsBrickController;
-
     [Range(0, 30)] public float playerJumpVelocity = 17f;
     [Range(100, 1000)] public float moveSpeed = 450f;
 
@@ -21,11 +19,6 @@ public class InputController : MonoBehaviour
         rb = PlayerController.Instance.GetComponent<Rigidbody2D>();
         spriteRenderer = PlayerController.Instance.GetComponent<SpriteRenderer>();
 
-        if (playerThrowsBrickController == null)
-        {
-            playerThrowsBrickController = GetComponent<PlayerThrowsBrickController>();
-        }
-        
         dontMove = true;
     }
 
@@ -98,8 +91,7 @@ public class InputController : MonoBehaviour
 
     public void ThrowBricks()
     {
-        
-        StartCoroutine(playerThrowsBrickController.ThrowsBricks(position));
+        StartCoroutine(GameManager.Instance.GetComponent<PlayerThrowsBrickController>().ThrowsBricks(position));
     }
 
 

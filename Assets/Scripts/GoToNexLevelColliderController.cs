@@ -8,6 +8,7 @@ public class GoToNexLevelColliderController : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
+            PlayerController.Instance.SaveScoreToDevice();
             SceneHandler.Instance.ChangeLevelTo("Level2");
         }
     }

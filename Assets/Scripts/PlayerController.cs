@@ -6,9 +6,6 @@ using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
-    GameObject gameManager;
-    GameManager game;
-
     [SerializeField] LayerMask groundMask;
     [SerializeField] LayerMask enemyMask;
 
@@ -58,6 +55,7 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         playerScore = 0;
+        currentLives = startLives;
 
         if (_instance != null && _instance != this)
         {
@@ -112,14 +110,17 @@ public class PlayerController : MonoBehaviour
     {
         if (healthBarStatus < 0)
         {
-            startLives--;
+            Debug.Log("Lives 1 " + currentLives);
+            currentLives--;
+            GameManager.Instance.GetComponentInChildren<LifeController>().RemoveLives();
             playerDied = true;
             healthBarStatus = 1.0f;
 
             SceneManager.LoadScene(currentLevel);
             
-            if (startLives <= 0)
+            if (currentLives < 0)
             {
+                Debug.Log("Lives 2 " + currentLives);
                 healthBarStatus = 0;
                 //gameOver = true;
                 SaveScoreToDevice();
@@ -185,7 +186,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void SaveScoreToDevice()
+    public void SaveScoreToDevice()
     {
         PlayerPrefs.SetInt("NewScore", playerScore);
         if (!PlayerPrefs.HasKey("HighScore"))

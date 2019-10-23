@@ -10,7 +10,7 @@ public class LifeController : MonoBehaviour
     public Vector2 offset;
     public float distance = 0.8f;
 
-    private List<GameObject> lives = new List<GameObject>();
+    [HideInInspector] public List<GameObject> lives = new List<GameObject>();
 
     private void Start()
     {
@@ -20,17 +20,7 @@ public class LifeController : MonoBehaviour
     private void Update()
     {
        SetLifeControllerToFollowMainCamera();
-      //  UpdateRemovedLives();
     }
-
-    //void UpdateRemovedLives()
-    //{
-    //    if (PlayerController.Instance.playerDied)
-    //    {
-    //        RemoveLives();
-    //        PlayerController.Instance.playerDied = false;
-    //    }
-    //}
 
     public void InitializeLife(int lifeCount)
     {
@@ -75,5 +65,11 @@ public class LifeController : MonoBehaviour
     {
         mainCamera = Camera.main.transform.position;
         transform.position = new Vector2(mainCamera.x + offset.x, mainCamera.y + offset.y);
+    }
+
+
+    private void OnDestroy()
+    {
+        Debug.Log("destroyed!");
     }
 }

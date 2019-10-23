@@ -5,8 +5,6 @@ using TMPro;
 
 public class CollectedBricksController : MonoBehaviour
 {
-    [SerializeField] PlayerThrowsBrickController playerThrowsBrickController;
-
     TextMeshPro collectedBricksText;
     public Vector2 offset;
 
@@ -17,10 +15,6 @@ public class CollectedBricksController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (playerThrowsBrickController == null)
-        {
-            playerThrowsBrickController = GetComponent<PlayerThrowsBrickController>();
-        } 
         collectedBricksText = GetComponentInChildren<TextMeshPro>();
         collectedBricksText.text = bricksAmount.ToString();
     }
@@ -34,7 +28,7 @@ public class CollectedBricksController : MonoBehaviour
 
     void UpdateBricksAmountText()
     {
-        bricksAmount = playerThrowsBrickController.playersCurrentBricks;
+        bricksAmount = GameManager.Instance.GetComponent<PlayerThrowsBrickController>().playersCurrentBricks;
         collectedBricksText.text = bricksAmount.ToString();
     }
 

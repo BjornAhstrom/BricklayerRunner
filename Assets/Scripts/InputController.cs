@@ -66,12 +66,11 @@ public class InputController : MonoBehaviour
 
     public void Jump()
     {
-        SoundManager.Instance.JumpSound();
-
         Vector2 jump = Vector2.up;
 
         if (PlayerController.Instance.CheckGround())
         {
+            SoundManager.Instance.JumpSound();
             rb.velocity = jump * playerJumpVelocity;
         }
     }

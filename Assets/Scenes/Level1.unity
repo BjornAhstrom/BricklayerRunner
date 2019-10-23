@@ -71763,6 +71763,10 @@ MonoBehaviour:
   cameraOrthographicSize: 2.1
   cameraMinPlayerYBottomCameraPosition: 0.05
   cameraMaxPlayerYTopCameraPosition: 0.05
+  freezePositionX: -11.9
+  freezePositionY: 50
+  zoomOutTo: 9
+  zoomOutTime: 2
   leftBounds: {fileID: 442026470}
   rightBounds: {fileID: 339084757}
 --- !u!20 &519420031
@@ -79408,7 +79412,7 @@ PrefabInstance:
     - target: {fileID: 3543409349522053545, guid: e741ebd996c654aafb736c36a1693e13,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -15.79
+      value: -10.86
       objectReference: {fileID: 0}
     - target: {fileID: 3543409349522053545, guid: e741ebd996c654aafb736c36a1693e13,
         type: 3}
@@ -79468,7 +79472,7 @@ PrefabInstance:
     - target: {fileID: 7573862887090727840, guid: e741ebd996c654aafb736c36a1693e13,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 16.78
+      value: 13.12
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e741ebd996c654aafb736c36a1693e13, type: 3}
@@ -83253,12 +83257,12 @@ PrefabInstance:
     - target: {fileID: 5023955570371195668, guid: 59bca3c9a91d74f498624a477dc0eac3,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.09
+      value: 58.2
       objectReference: {fileID: 0}
     - target: {fileID: 5023955570371195668, guid: 59bca3c9a91d74f498624a477dc0eac3,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.07
+      value: 65.7
       objectReference: {fileID: 0}
     - target: {fileID: 8437691406604739708, guid: 59bca3c9a91d74f498624a477dc0eac3,
         type: 3}
@@ -85495,8 +85499,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7407820161445447351}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -30.398, y: 5.229991, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -30.09, y: 5.15, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 7407820161541598249}

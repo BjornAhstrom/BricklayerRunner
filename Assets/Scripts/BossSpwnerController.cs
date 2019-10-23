@@ -12,7 +12,7 @@ public class BossSpwnerController : MonoBehaviour
     {
         wall.SetActive(true);
 
-        ZoomOut();
+        Camera.main.GetComponent<CameraFollow>().ZoomOut();
 
         // if collision is player
         if (collision.CompareTag("Player"))
@@ -24,13 +24,5 @@ public class BossSpwnerController : MonoBehaviour
 
             gameObject.SetActive(false);
         }
-    }
-
-    void ZoomOut()
-    {
-        LeanTween.value(Camera.main.gameObject, Camera.main.orthographicSize, 9f, 2f).setOnUpdate((float test) =>
-        {
-            Camera.main.orthographicSize = test;
-        });
     }
 }

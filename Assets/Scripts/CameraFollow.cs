@@ -9,8 +9,11 @@ public class CameraFollow : MonoBehaviour
     [Range(0, 10)] public float cameraOrthographicSize = 0f;
     [Range(-10, 10)] public float cameraMinPlayerYBottomCameraPosition = 0.05f;
     [Range(-10, 10)] public float cameraMaxPlayerYTopCameraPosition = 0.05f;
-    //[Range(-100, 100)] public float cameraZoom = -10f;
- 
+    [Range(-100, 100)] public float freezePositionX = 0f;
+    [Range(-100, 100)] public float freezePositionY = 50f;
+    [Range(-30, 30)] public float zoomOutTo = 9f;
+    [Range(0, 10)] public float zoomOutTime = 2f;
+
     public Transform leftBounds;
     public Transform rightBounds;
 
@@ -26,13 +29,10 @@ public class CameraFollow : MonoBehaviour
     private float playerY;
     private float x;
     private float y;
+    private bool freezeCameraPosition;
 
     private void Start()
     {
-        //Vector2 test = new Vector2(282f, rightBounds.position.y);
-
-        //rightBounds.position = test;
-
         camHeigt = Camera.main.orthographicSize * cameraOrthographicSize;
         camWidth = camHeigt * Camera.main.aspect;
 
@@ -41,8 +41,6 @@ public class CameraFollow : MonoBehaviour
 
         levelMinX = leftBounds.position.x + leftBoundWidth + (camWidth / splitScreen);
         levelMaxX = rightBounds.position.x + rightBoundsWidth - (camWidth / splitScreen);
-
-
     }
 
     private void Update()
@@ -52,7 +50,7 @@ public class CameraFollow : MonoBehaviour
 
     void CameraFollowSmooth()
     {
-        if (PlayerController.Instance)
+        if (PlayerController.Instance && !freezeCameraPosition)
         {
             playerX = Mathf.Max(levelMinX, Mathf.Min(levelMaxX, PlayerController.Instance.transform.position.x));
 
@@ -63,8 +61,22 @@ public class CameraFollow : MonoBehaviour
             y = Mathf.SmoothDamp(transform.position.y, playerY, ref smoothDampVelocity.y, smoothDampTime);
 
             transform.position = new Vector3(x, y, transform.position.z);
-
- 
         }
+        else
+        {
+            Vector3 pos = new Vector3(freezePositionX, freezePositionY, Camera.main.transform.position.z);
+
+            Camera.main.transform.position = pos;
+        }
+    }
+
+     public void ZoomOut()
+    {
+        freezeCameraPosition = true;
+
+        LeanTween.value(gameObject, Camera.main.orthographicSize, zoomOutTo, zoomOutTime).setOnUpdate((float test) =>
+        {
+            Camera.main.orthographicSize = test;
+        });
     }
 }

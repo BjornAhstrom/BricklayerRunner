@@ -68,6 +68,7 @@ public class EnemyController : MonoBehaviour
 
         if (collision.transform.CompareTag("Brick") && hit) // && enemyIsAlive == true)
         {
+            SoundManager.Instance.HitEnemySound();
             PlayerController.Instance.playerScore += pointsFromDamage;
             healthBarStatus -= (1f / (float) nrOfHits);
             UpdateHealthBarStatus();
@@ -108,6 +109,7 @@ public class EnemyController : MonoBehaviour
         {
             checkIfEnemyCanRunToLeftOrRight();
             PlayerController.Instance.playerScore += pointsFromDamage;
+            SoundManager.Instance.HitEnemySound();
             healthBarStatus -= (1f / (float)nrOfHits);
             UpdateHealthBarStatus();
             jumpOnHead = true;

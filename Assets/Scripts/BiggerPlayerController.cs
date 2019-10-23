@@ -9,6 +9,7 @@ public class BiggerPlayerController : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             PlayerController.Instance.MakePlayerBigger();
+            SoundManager.Instance.TakeBiggerPlayerSound();
             gameObject.SetActive(false);
         }
     }

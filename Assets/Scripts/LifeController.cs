@@ -19,18 +19,18 @@ public class LifeController : MonoBehaviour
 
     private void Update()
     {
-        SetLifeControllerToFollowMainCamera();
-        UpdateRemovedLives();
+       SetLifeControllerToFollowMainCamera();
+      //  UpdateRemovedLives();
     }
 
-    void UpdateRemovedLives()
-    {
-        if (PlayerController.Instance.playerDied)
-        {
-            RemoveLives();
-            PlayerController.Instance.playerDied = false;
-        }
-    }
+    //void UpdateRemovedLives()
+    //{
+    //    if (PlayerController.Instance.playerDied)
+    //    {
+    //        RemoveLives();
+    //        PlayerController.Instance.playerDied = false;
+    //    }
+    //}
 
     public void InitializeLife(int lifeCount)
     {
@@ -51,7 +51,7 @@ public class LifeController : MonoBehaviour
             GameObject life = Instantiate(firstLife);
             lives.Add(life);
             life.transform.parent = transform;
-            Vector3 pos = life.transform.position;
+            Vector3 pos = firstLife.transform.position;
             pos.x += distance * (i + 1);
             life.transform.position = pos;
         }
@@ -74,6 +74,6 @@ public class LifeController : MonoBehaviour
     void SetLifeControllerToFollowMainCamera()
     {
         mainCamera = Camera.main.transform.position;
-        transform.GetChild(0).position = new Vector2(mainCamera.x + offset.x, mainCamera.y + offset.y);
+        transform.position = new Vector2(mainCamera.x + offset.x, mainCamera.y + offset.y);
     }
 }

@@ -51,7 +51,7 @@ public class SoundManager : MonoBehaviour
         audioSource.Play();
     }
 
-    public void JumpOnEnemySound()
+    public void HitEnemySound()
     {
         audioSource.clip = jumpOnEnemy;
         audioSource.Play();

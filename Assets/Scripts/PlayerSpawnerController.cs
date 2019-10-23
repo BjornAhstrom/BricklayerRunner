@@ -14,6 +14,8 @@ public class PlayerSpawnerController : MonoBehaviour
 
     private void Start()
     {
+        currentCheckPointPosition = startPosition.position;
+
         if (PlayerController.Instance.runTroughCheckPoint1)
         {
             currentCheckPointPosition = checkPoint1.position;

@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour
     [Range(0, 10)] public float playerDistanceToGround = 1.2f;
     [Range(0, 10)] public float enemyMoveSpeed = 5f;
 
+
     private static GameManager _instance;
 
     public static GameManager Instance

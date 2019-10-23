@@ -17,7 +17,7 @@ public class PlayerThrowsBrickController : MonoBehaviour
     {
             for (int i = 0; i < playersCurrentBricks; i++)
             {
-                brick = Instantiate(brickPrefab);
+                brick = Instantiate(brickPrefab, GameManager.Instance.gameObject.transform);
                 brick.SetActive(false);
 
                 Rigidbody2D rb = brick.GetComponent<Rigidbody2D>();
